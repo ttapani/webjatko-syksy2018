@@ -1,10 +1,20 @@
 import Link from 'next/link';
 import React from 'react';
 import Button from '@material-ui/core/Button'
+import Clock from './Clock';
 
-const today = new Date();
+const Home: React.SFC = () => {
+  const today = new Date();
 
-const Home: React.SFC = () => (
+  const printClocks = () => {
+    let clocks = [];
+    for(let i = 0; i < 10; ++i) {
+      clocks.push(<Clock key={i}/>)
+    }
+    return clocks;
+  }
+  
+  return (
     <div>
     Hello World.{' '}
     <Link href="/about">
@@ -14,13 +24,15 @@ const Home: React.SFC = () => (
       <p>Tänään on {today.toLocaleDateString('fi')}</p>
     </div>
     <div>
-      {maat.map(item => <div>{item.name + '-' + item.population}</div>)}
+      {maat.map(item => <div key={item.ID}>{item.name + '-' + item.population}</div>)}
     </div>
     <Button color="primary">Material UI Test Button</Button>
+    <div>
+      {printClocks()}
+    </div>
   </div>
-)
-
-
+  )
+}
 
 const maat:any[] = [
   {"ID":"1067","name":"China","population":"1359821466","percentage":"19,66%","position":"1"},
