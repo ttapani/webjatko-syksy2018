@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
+import Button from '@material-ui/core/Button'
 
 const today = new Date();
 
@@ -15,8 +16,11 @@ const Home: React.SFC = () => (
     <div>
       {maat.map(item => <div>{item.name + '-' + item.population}</div>)}
     </div>
+    <Button color="primary">Material UI Test Button</Button>
   </div>
 )
+
+
 
 const maat:any[] = [
   {"ID":"1067","name":"China","population":"1359821466","percentage":"19,66%","position":"1"},
