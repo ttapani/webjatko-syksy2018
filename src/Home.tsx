@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import React from 'react';
-import Button from '@material-ui/core/Button'
+import Button from '@material-ui/core/Button';
 import Clock from './Clock';
+import Countries from './Countries';
 
 const Home: React.SFC = () => {
   const today = new Date();
@@ -29,6 +30,9 @@ const Home: React.SFC = () => {
     <Button color="primary">Material UI Test Button</Button>
     <div>
       {printClocks()}
+    </div>
+    <div>
+      <Countries></Countries>
     </div>
   </div>
   )
