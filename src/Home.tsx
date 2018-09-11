@@ -25,6 +25,7 @@ const Home: React.SFC = () => {
       <p>Tänään on {today.toLocaleDateString('fi')}</p>
     </div>
     <div>
+<<<<<<< HEAD
       {maat.map(item => <div key={item.ID}>{item.name + '-' + item.population}</div>)}
     </div>
     <Button color="primary">Material UI Test Button</Button>
@@ -33,6 +34,9 @@ const Home: React.SFC = () => {
     </div>
     <div>
       <Countries></Countries>
+=======
+      {maat.map(item => <div>{item.position + '-' + item.name + '-' + item.population}</div>)}
+>>>>>>> list-position
     </div>
   </div>
   )
