@@ -13,7 +13,7 @@ const Home: React.SFC = () => (
       <p>Tänään on {today.toLocaleDateString('fi')}</p>
     </div>
     <div>
-      {maat.map(item => <div>{item.name + '-' + item.population}</div>)}
+      {maat.map(item => <div>{item.position + '-' + item.name + '-' + item.population}</div>)}
     </div>
   </div>
 )
