@@ -25,7 +25,7 @@ const Home: React.SFC = () => {
       <p>Tänään on {today.toLocaleDateString('fi')}</p>
     </div>
     <div>
-      {maat.map(item => <div key={item.ID}>{item.name + '-' + item.population}</div>)}
+      {maat.map(item => <div key={item.ID}>{item.position + '-' + item.name + '-' + item.population}</div>)}
     </div>
     <Button color="primary">Material UI Test Button</Button>
     <div>
