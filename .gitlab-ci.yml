@@ -31,7 +31,7 @@ build_webapp:
     paths:
       - .yarn
   dependencies:
-    - build_webapp
+    - test_webapp
   artifacts:
     paths:
       - node_modules/
