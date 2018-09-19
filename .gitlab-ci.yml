@@ -35,6 +35,7 @@ build_webapp:
   artifacts:
     paths:
       - node_modules/
+      - .next/
   script:
     - yarn build
 
@@ -43,7 +44,8 @@ build_container:
   stage: containerize
   artifacts:
     paths:
-      - /frontend/node_modules
+      - node_modules/
+      - .next/
   services:
     - docker:dind
   dependencies:
