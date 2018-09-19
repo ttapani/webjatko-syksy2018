@@ -64,7 +64,6 @@ deploy_webapp:
   script:
     - export WEBAPP_IMAGE="${CI_REGISTRY_IMAGE}/webapp"
     - apk update && apk add rsync openssh
-    - docker login -u gitlab-ci-token -p "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
     # Prepare SSH settings
     - mkdir -p ~/.ssh && (umask  077 ; echo "${DEPLOY_KEY_PRIVATE}" | base64 -d > ~/.ssh/id_rsa)
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
