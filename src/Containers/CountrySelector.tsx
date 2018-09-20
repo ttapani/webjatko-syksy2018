@@ -1,11 +1,15 @@
 import React from 'react';
-import Country from './Components/Country';
+import Countries from './Countries';
 import Grid from '@material-ui/core/Grid';
-import { createStyles, WithStyles } from '@material-ui/core';
+import { Country } from '../Types/Country';
+import { createStyles, WithStyles, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-interface ICountriesProps extends WithStyles<typeof styles> {
+interface ICountrySelectorProps extends WithStyles<typeof styles> {
+}
 
+interface ICountrySelectorState {
+    selectedCountries: any [],
 }
 
 const styles = () => createStyles({
@@ -14,12 +18,15 @@ const styles = () => createStyles({
     }
 });
 
-class Countries extends React.Component<ICountriesProps, null> {
+class CountrySelector extends React.Component<ICountrySelectorProps, ICountrySelectorState> {
     constructor(props) {
         super(props);
+        this.state = { selectedCountries: [] };
+        this.selectCountry = this.selectCountry.bind(this);
+        this.deselectCountry = this.deselectCountry.bind(this);
     }
 
-    maat:any[] = [
+    countries: any[] = [
         {"ID":"1067","name":"China","population":"1359821466","percentage":"19,66%","position":"1"},
         {"ID":"1068","name":"India","population":"1205624727","percentage":"17,43%","position":"2"},
         {"ID":"1069","name":"United States of America","population":"312237216","percentage":"4,51%","position":"3"},
@@ -52,29 +59,43 @@ class Countries extends React.Component<ICountriesProps, null> {
         {"ID":"1096","name":"United Republic of Tanzania","population":"44973330","percentage":"0,65%","position":"30"}
     ];
 
-    private printCountry(country: any) {
+    private selectCountry(country: Country): void {
+        if(this.state.selectedCountries.find((c) => c.ID == country.ID) == undefined) {
+            this.setState({ selectedCountries: this.state.selectedCountries.concat(country)});
+        }
+        console.log("added" + JSON.stringify(country));
+        console.log(this.state.selectedCountries);
+    }
+
+    private deselectCountry(country: Country): void {
+        this.setState({ selectedCountries: this.state.selectedCountries.filter((c) => c.ID !== country.ID)})
+        console.log("remove" + JSON.stringify(country));
+        console.log(this.state.selectedCountries);
+    }
+
+    public render(): React.ReactNode {
         return (
-            <Grid item key={country.ID}>
-                <Country
-                    position={country.position}
-                    name={country.name}
-                    population={country.population}
-                    percentage={country.percentage}>
-                </Country>
-            </Grid>
+            <div>
+                <Grid container direction="row">
+                    <Grid item>
+                        <Grid item>
+                            <Typography variant="title">
+                            Maat
+                            </Typography>
+                        </Grid>
+                        <Countries countries={this.countries} onClick={(country: Country) => this.selectCountry(country)}></Countries>
+                    </Grid>
+                    <Grid item>
+                        <Grid item>
+                            <Typography variant="title">
+                            Valitut
+                            </Typography>
+                        </Grid>
+                        <Countries countries={this.state.selectedCountries} onClick={(country: Country) => this.deselectCountry(country)}></Countries>
+                    </Grid>
+                </Grid>
+            </div>
         )
     }
-    
-    public render(): React.ReactNode {
-        const { classes } = this.props;
-        return (
-            <Grid container className={classes.root}>
-                <Grid container spacing={8} direction="column">
-                    {this.maat.map(item => this.printCountry(item))}
-                </Grid>
-            </Grid>
-        );
-    }
 }
-
-export default withStyles(styles)(Countries);
+export default withStyles(styles)(CountrySelector);

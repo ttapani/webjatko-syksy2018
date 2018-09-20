@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import Clock from './Clock';
-import Countries from './Countries';
+import CountrySelector from './Containers/CountrySelector';
 
 const Home: React.SFC = () => {
   const today = new Date();
@@ -27,7 +27,7 @@ const Home: React.SFC = () => {
       {printClocks()}
     </div>
     <div>
-      <Countries></Countries>
+      <CountrySelector/>
     </div>
   </div>
   )
