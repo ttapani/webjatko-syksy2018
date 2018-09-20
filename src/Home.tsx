@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Clock from './Clock';
 import Countries from './Countries';
 
