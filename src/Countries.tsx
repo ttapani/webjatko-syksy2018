@@ -1,8 +1,20 @@
 import React from 'react';
-import Table from '@material-ui/core/Table';
-import { TableHead, TableCell, TableRow, TableBody } from '@material-ui/core';
+import Country from './Components/Country';
+import Grid from '@material-ui/core/Grid';
+import { createStyles, WithStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
-class Countries extends React.Component<{}, null> {
+interface ICountriesProps extends WithStyles<typeof styles> {
+
+}
+
+const styles = () => createStyles({
+    root: {
+        flexGrow: 1,
+    }
+});
+
+class Countries extends React.Component<ICountriesProps, null> {
     constructor(props) {
         super(props);
     }
@@ -39,31 +51,30 @@ class Countries extends React.Component<{}, null> {
         {"ID":"1095","name":"Ukraine","population":"46044304","percentage":"0,67%","position":"29"},
         {"ID":"1096","name":"United Republic of Tanzania","population":"44973330","percentage":"0,65%","position":"30"}
     ];
+
+    private printCountry(country: any) {
+        return (
+            <Grid item key={country.ID}>
+                <Country
+                    position={country.position}
+                    name={country.name}
+                    population={country.population}
+                    percentage={country.percentage}>
+                </Country>
+            </Grid>
+        )
+    }
     
     public render(): React.ReactNode {
+        const { classes } = this.props;
         return (
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>#</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Population</TableCell>
-                        <TableCell>Percentage</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {this.maat.map(item => 
-                        <TableRow key={item.ID}>
-                            <TableCell>{Number(item.position) % 2 == 0 ? '' : item.position}</TableCell>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell>{item.population}</TableCell>
-                            <TableCell>{item.percentage}</TableCell>
-                        </TableRow>)
-                    }
-                </TableBody>
-            </Table>
+            <Grid container className={classes.root}>
+                <Grid container spacing={8} direction="column">
+                    {this.maat.map(item => this.printCountry(item))}
+                </Grid>
+            </Grid>
         );
     }
 }
 
-export default Countries;
+export default withStyles(styles)(Countries);
