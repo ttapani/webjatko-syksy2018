@@ -5,6 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import ToolBar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Link from 'next/link';
 
 interface IHeaderProps extends WithStyles<typeof styles> {
 
@@ -38,12 +39,16 @@ class Header extends React.Component<IHeaderProps, null> {
                         <Typography variant="title" color="inherit" className={classes.grow}>
                             webjatko18
                         </Typography>
-                        <Button color="inherit">
-                            Countries
-                        </Button>
-                        <Button color="inherit">
-                            Clocks
-                        </Button>
+                        <Link href="/countries">
+                            <Button color="inherit">
+                                Countries
+                            </Button>
+                        </Link>
+                        <Link href="/clocks">
+                            <Button color="inherit">
+                                Clocks
+                            </Button>
+                        </Link>
                     </ToolBar>
                 </AppBar>
             </div>
