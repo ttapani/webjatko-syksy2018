@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import React from 'react';
-import CountrySelector from './Containers/CountrySelector';
 import Header from './Containers/Header';
 
 const Home: React.SFC = () => {
