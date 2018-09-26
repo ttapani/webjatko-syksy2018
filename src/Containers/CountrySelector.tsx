@@ -63,14 +63,10 @@ class CountrySelector extends React.Component<ICountrySelectorProps, ICountrySel
         if(this.state.selectedCountries.find((c) => c.ID == country.ID) == undefined) {
             this.setState({ selectedCountries: this.state.selectedCountries.concat(country)});
         }
-        console.log("added" + JSON.stringify(country));
-        console.log(this.state.selectedCountries);
     }
 
     private deselectCountry(country: Country): void {
         this.setState({ selectedCountries: this.state.selectedCountries.filter((c) => c.ID !== country.ID)})
-        console.log("remove" + JSON.stringify(country));
-        console.log(this.state.selectedCountries);
     }
 
     public render(): React.ReactNode {
