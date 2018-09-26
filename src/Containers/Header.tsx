@@ -36,9 +36,11 @@ class Header extends React.Component<IHeaderProps, null> {
             <div className={classes.root}>
                 <AppBar position="fixed">
                     <ToolBar>
-                        <Typography variant="title" color="inherit" className={classes.grow}>
-                            webjatko18
-                        </Typography>
+                        <Link href="/">
+                            <Typography variant="title" color="inherit" className={classes.grow}>
+                                webjatko18
+                            </Typography>
+                        </Link>
                         <Link href="/countries">
                             <Button color="inherit">
                                 Countries
