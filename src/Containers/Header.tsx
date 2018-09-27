@@ -14,7 +14,7 @@ interface IHeaderProps extends WithStyles<typeof styles> {
 const styles = () => createStyles({
     root: {
         flexGrow: 1,
-        paddingBottom: 70,
+        //paddingBottom: 70,
     },
     grow: {
         flexGrow: 1,

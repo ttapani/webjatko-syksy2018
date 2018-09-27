@@ -10,7 +10,9 @@ const CountriesPage: React.SFC<{}> = () => {
                 <title>Countries</title>
             </Head>
             <Header/>
-            <CountrySelector/>
+            <div style={{ paddingTop: 74, paddingLeft: 10 }}>
+                <CountrySelector/>
+            </div>
         </>
     )
 }

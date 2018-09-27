@@ -19,9 +19,11 @@ const ClocksPage: React.SFC<{}> = () => {
                 <title>Clocks</title>
             </Head>
             <Header/>
-            <p>Tänään on {today.toLocaleDateString('fi')}</p>
-            <div>
-                {printClocks()}
+            <div style={{ paddingTop: 64, paddingLeft: 10 }}>
+                <p>Tänään on {today.toLocaleDateString('fi')}</p>
+                <div>
+                    {printClocks()}
+                </div>
             </div>
         </>
     )
