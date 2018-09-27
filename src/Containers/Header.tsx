@@ -41,6 +41,11 @@ class Header extends React.Component<IHeaderProps, null> {
                                 webjatko18
                             </Typography>
                         </Link>
+                        <Link href="/remotecountries">
+                            <Button color="inherit">
+                                Remote
+                            </Button>
+                        </Link>
                         <Link href="/countries">
                             <Button color="inherit">
                                 Countries
