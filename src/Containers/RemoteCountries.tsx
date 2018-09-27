@@ -5,31 +5,35 @@ import { createStyles, WithStyles } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { RemoteCountry } from '../Types/RemoteCountry';
 import 'isomorphic-unfetch';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 interface ICountriesProps extends WithStyles<typeof styles> {
 }
 
 interface ICountriesState {
     countries: any[];
+    loading: boolean;
 }
 
 const styles = () => createStyles({
     root: {
         flexGrow: 1,
-        paddingLeft: 5,
+        paddingLeft: 10,
     }
 });
 
 class RemoteCountries extends React.Component<ICountriesProps, ICountriesState> {
     constructor(props) {
         super(props);
-        this.state ={ countries: []};
+        this.state ={ countries: [], loading: false };
     }
 
     async getData() {
+        this.setState({ ...this.state, loading: true });
         const res = await fetch('https://restcountries.eu/rest/v2/all')
         const json = await res.json()
-        this.setState({ countries: json });
+        this.setState({ ...this.state, countries: json, loading: false });
         return json;
     }
 
@@ -52,11 +56,16 @@ class RemoteCountries extends React.Component<ICountriesProps, ICountriesState> 
     public render(): React.ReactNode {
         const { classes } = this.props;
         return (
-            <Grid container className={classes.root}>
-                <Grid container spacing={8} direction="column">
+            <CssBaseline>
+            <div style={{ paddingTop: 64 }}>
+            <LinearProgress style={{ visibility: this.state.loading ? 'visible' : 'hidden'}}/>
+            <Grid container className={classes.root} style={{ paddingTop: 10 }}>
+                <Grid container spacing={8} alignItems="center">
                     {this.state.countries.map(item => this.printCountry(item))}
                 </Grid>
             </Grid>
+            </div>
+            </CssBaseline>
         );
     }
 }

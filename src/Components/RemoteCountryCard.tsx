@@ -12,7 +12,6 @@ interface ICountryProps extends WithStyles<typeof styles> {
 
 const styles = () => createStyles({
     card: {
-        minWidth: 345,
         maxWidth: 345,
     },
     title: {
@@ -23,7 +22,7 @@ const styles = () => createStyles({
         marginBottom: 10
     },
     button: {
-        width: 345,
+        //minWidth: 345,
     },
     media: {
         height: 200,
@@ -40,9 +39,12 @@ const RemoteCountryCard: React.SFC<ICountryProps> = (props) => {
         <Card className={classes.card}>
             <CardActionArea className={classes.button} onClick={onClick} disabled={true}>
                 <CardMedia
-                    className={classes.media}
+                    component="img"
                     image={props.country.flag}
                     title="Flag of {props.country.name}"
+                    style={{
+                        objectFit: "scale-down",
+                    }}
                 />
                 <CardContent>
                     <Typography className={classes.name} variant="headline" component="h2">
