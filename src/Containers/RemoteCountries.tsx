@@ -7,6 +7,7 @@ import { RemoteCountry } from '../Types/RemoteCountry';
 import 'isomorphic-unfetch';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Router from 'next/router'
 
 interface ICountriesProps extends WithStyles<typeof styles> {
 }
@@ -42,12 +43,12 @@ class RemoteCountries extends React.Component<ICountriesProps, ICountriesState> 
     }
 
     private printCountry(country: any) {
-        const item: RemoteCountry = {alpha3Code: country.alpha3code, name: country.name, population: country.population, capital: country.capital, flag: country.flag, region: country.region};
+        const item: RemoteCountry = {alpha3Code: country.alpha3code, name: country.name, population: country.population, capital: country.capital, flag: country.flag, region: country.region };
         return (
             <Grid item key={country.ID}>
                 <RemoteCountryCard
                     country={item}
-                    onClick={() => null}>
+                    onClick={() => Router.push({ pathname: '/countryinfo', query: { name: item.name }})}>
                 </RemoteCountryCard>
             </Grid>
         )
