@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { createStyles, WithStyles, Theme } from '@material-ui/core';
+import { createStyles, WithStyles, Theme, Typography } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -28,6 +28,10 @@ const styles = (theme: Theme) => createStyles({
         width: drawerWidth,
     },
     toolbar: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        padding: '0 16px',
         ...theme.mixins.toolbar,
     },
 });
@@ -49,10 +53,13 @@ class SideBar extends React.Component<ISidebarProps, ISidebarState> {
                         classes={{ paper: classes.drawerPaper }}
                         open={true}
                     >
-                    {/* Weird interaction with spacers */}
-                    <div className={classes.toolbar}/>
-                        <Divider />
-                        <List>{mainListItems}</List>
+                    <div className={classes.toolbar}>
+                        <Typography variant="h6">
+                                Loan system
+                        </Typography>
+                    </div>
+                    <Divider />
+                    <List>{mainListItems}</List>
                     </Drawer>
                 </Hidden>
                 <Hidden smUp={true} implementation="css">
@@ -63,10 +70,13 @@ class SideBar extends React.Component<ISidebarProps, ISidebarState> {
                         classes={{ paper: classes.drawerPaper }}
                         ModalProps={{ keepMounted: true }}
                     >
-                    {/* Weird interaction with spacers */}
-                    <div className={classes.toolbar}/>
-                        <Divider />
-                        <List>{mainListItems}</List>
+                    <div className={classes.toolbar}>
+                        <Typography variant="h6">
+                                Loan system
+                        </Typography>
+                    </div>
+                    <Divider />
+                    <List>{mainListItems}</List>
                     </Drawer>
                 </Hidden>
             </div>
