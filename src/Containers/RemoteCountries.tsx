@@ -20,7 +20,6 @@ interface ICountriesState {
 const styles = () => createStyles({
     root: {
         flexGrow: 1,
-        paddingLeft: 10,
     }
 });
 
@@ -58,7 +57,7 @@ class RemoteCountries extends React.Component<ICountriesProps, ICountriesState> 
         const { classes } = this.props;
         return (
             <CssBaseline>
-            <div style={{ paddingTop: 64 }}>
+            <div>
             <LinearProgress style={{ visibility: this.state.loading ? 'visible' : 'hidden'}}/>
             <Grid container className={classes.root} style={{ paddingTop: 10 }}>
                 <Grid container spacing={8} alignItems="center">

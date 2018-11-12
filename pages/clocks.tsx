@@ -1,7 +1,6 @@
 import React from 'react';
 import Clock from '../src/Containers/Clock';
-import Header from '../src/Containers/Header';
-import Head from 'next/head';
+import Layout from '../src/Layout/Layout';
 
 const ClocksPage: React.SFC<{}> = () => {
     const today = new Date();
@@ -14,18 +13,12 @@ const ClocksPage: React.SFC<{}> = () => {
       }
 
     return (
-        <>
-            <Head>
-                <title>Clocks</title>
-            </Head>
-            <Header/>
-            <div style={{ paddingTop: 64, paddingLeft: 10 }}>
-                <p>Tänään on {today.toLocaleDateString('fi')}</p>
-                <div>
-                    {printClocks()}
-                </div>
+        <Layout title={"Clocks"}>
+            <p>Tänään on {today.toLocaleDateString('fi')}</p>
+            <div>
+                {printClocks()}
             </div>
-        </>
+        </Layout>
     )
 }
 
