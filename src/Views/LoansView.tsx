@@ -7,6 +7,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import loans from '../AppData/loans';
+import equipments from '../AppData/equipments';
+import users from '../AppData/users';
 
 interface IProps extends WithStyles<typeof styles> {
 
@@ -26,8 +28,16 @@ const styles = (theme: Theme) => createStyles({
     },
     tableContainer: {
         height: 320,
-    }
+    },
 });
+
+const getEquipmentName = (id: string) => {
+    return equipments.find(equipment => equipment.id === id).name;
+}
+
+const getUserName = (id: string) => {
+    return users.find(users => users.id === id).name;
+}
 
 class LoansView extends React.Component<IProps, IState> {
     constructor(props: IProps) {
@@ -55,8 +65,8 @@ class LoansView extends React.Component<IProps, IState> {
                                         return (
                                             <TableRow key={row.id}>
                                                 <TableCell>{row.id}</TableCell>
-                                                <TableCell>{row.equipmentId}</TableCell>
-                                                <TableCell>{row.userId}</TableCell>
+                                                <TableCell>{getEquipmentName(row.equipmentId)}</TableCell>
+                                                <TableCell>{getUserName(row.userId)}</TableCell>
                                                 <TableCell>{row.begins}</TableCell>
                                                 <TableCell>{row.ends}</TableCell>
                                                 <TableCell>{row.returned}</TableCell>
