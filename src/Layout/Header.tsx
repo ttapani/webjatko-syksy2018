@@ -13,20 +13,25 @@ interface IHeaderProps extends WithStyles<typeof styles> {
     handleMenuNuttonClick: () => void;
 }
 
+const drawerWidth = 240;
+
 const styles = (theme: Theme) => createStyles({
     appBar: {
+        marginLeft: drawerWidth,
+        [theme.breakpoints.up('sm')]: {
+            width: `calc(100% - ${drawerWidth}px)`,
+        },
         zIndex: theme.zIndex.drawer + 1,
     },
     title: {
         flexGrow: 1,
-        [theme.breakpoints.up('md')]: {
+        [theme.breakpoints.up('sm')]: {
             marginLeft: 12 + 24,
         },
     },
     menuButton: {
-        marginLeft: 12,
         marginRight: 20,
-        [theme.breakpoints.up('md')]: {
+        [theme.breakpoints.up('sm')]: {
             display: 'none',
         },
     },
@@ -42,7 +47,7 @@ class Header extends React.Component<IHeaderProps, null> {
         const { classes, title } = this.props;
         return (
             <AppBar position="absolute" className={classes.appBar}>
-                <ToolBar disableGutters={true}>
+                <ToolBar>
                     <IconButton
                         color="inherit"
                         aria-label="Open drawer"
@@ -51,7 +56,7 @@ class Header extends React.Component<IHeaderProps, null> {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="title" color="inherit" noWrap={true} className={classes.title}>
+                    <Typography variant="h6" color="inherit" noWrap={true}>
                         {title}
                     </Typography>
                 </ToolBar>

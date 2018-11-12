@@ -24,15 +24,7 @@ const styles = (theme: Theme) => createStyles({
     appBarSpacer: theme.mixins.toolbar,
     content: {
         flexGrow: 1,
-        [theme.breakpoints.down('xs')]: {
-            padding: 0,
-        },
-        [theme.breakpoints.up('sm')]: {
-            padding: theme.spacing.unit * 3,
-        },
-        minWidth: 0,
-        height: '100vh',
-        overflow: 'auto',
+        padding: theme.spacing.unit * 3,
     },
 });
 

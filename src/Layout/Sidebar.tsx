@@ -18,16 +18,13 @@ interface ISidebarState {
 const drawerWidth = 240;
 
 const styles = (theme: Theme) => createStyles({
-    root: {
-        [theme.breakpoints.down('sm')]: {
-            display: 'none',
-        },
-        [theme.breakpoints.up('md')]: {
-            display: 'flex',
+    drawer: {
+        [theme.breakpoints.up('sm')]: {
+            width: drawerWidth,
+            flexShrink: 0,
         },
     },
     drawerPaper: {
-        position: 'relative',
         width: drawerWidth,
     },
     toolbar: {
@@ -45,19 +42,20 @@ class SideBar extends React.Component<ISidebarProps, ISidebarState> {
         const { classes } = this.props;
         return (
             <>
-            {/* <div className={classes.root}> */}
-                <Hidden smDown={true} implementation="css" className={classes.root}>
+            <div className={classes.drawer}>
+                <Hidden xsDown={true} implementation="css" className={classes.root}>
                     <Drawer
                         variant="permanent"
                         classes={{ paper: classes.drawerPaper }}
+                        open={true}
                     >
-                    <Divider />
                     {/* Weird interaction with spacers */}
                     <div className={classes.toolbar}/>
-                    <List>{mainListItems}</List>
+                        <Divider />
+                        <List>{mainListItems}</List>
                     </Drawer>
                 </Hidden>
-                <Hidden mdUp={true} implementation="css">
+                <Hidden smUp={true} implementation="css">
                     <Drawer
                         variant="temporary"
                         open={this.props.mobileOpen}
@@ -65,13 +63,13 @@ class SideBar extends React.Component<ISidebarProps, ISidebarState> {
                         classes={{ paper: classes.drawerPaper }}
                         ModalProps={{ keepMounted: true }}
                     >
-                    <Divider />
                     {/* Weird interaction with spacers */}
                     <div className={classes.toolbar}/>
-                    <List>{mainListItems}</List>
+                        <Divider />
+                        <List>{mainListItems}</List>
                     </Drawer>
                 </Hidden>
-            {/* </div> */}
+            </div>
             </>
         );
     }
