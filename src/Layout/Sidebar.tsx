@@ -47,7 +47,7 @@ class SideBar extends React.Component<ISidebarProps, ISidebarState> {
         return (
             <>
             <div className={classes.drawer}>
-                <Hidden xsDown={true} implementation="css" className={classes.root}>
+                <Hidden xsDown={true} implementation="css">
                     <Drawer
                         variant="permanent"
                         classes={{ paper: classes.drawerPaper }}
