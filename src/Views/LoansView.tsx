@@ -1,14 +1,10 @@
 import React from 'react';
-import { WithStyles, Theme, createStyles, withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import { WithStyles, createStyles, withStyles } from '@material-ui/core/styles';
 import loans from '../AppData/loans';
 import equipments from '../AppData/equipments';
 import users from '../AppData/users';
+import DataTable from '../Containers/DataTable';
+import Paper from '@material-ui/core/Paper';
 
 interface IProps extends WithStyles<typeof styles> {
 
@@ -18,7 +14,7 @@ interface IState {
 
 }
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     root: {
         width: '100%',
         overflowX: 'auto',
@@ -42,6 +38,7 @@ const getUserName = (id: string) => {
 class LoansView extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
+
     }
 
     public render(): React.ReactNode {
@@ -49,35 +46,36 @@ class LoansView extends React.Component<IProps, IState> {
         return (
                 <div className={classes.tableContainer}>
                     <Paper className={classes.root}>
-                            <Table className={classes.table}>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>ID</TableCell>
-                                        <TableCell>Equipment</TableCell>
-                                        <TableCell>User</TableCell>
-                                        <TableCell>Begins</TableCell>
-                                        <TableCell>Ends</TableCell>
-                                        <TableCell>Returned</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {loans.map(row => {
-                                        return (
-                                            <TableRow key={row.id}>
-                                                <TableCell>{row.id}</TableCell>
-                                                <TableCell>{getEquipmentName(row.equipmentId)}</TableCell>
-                                                <TableCell>{getUserName(row.userId)}</TableCell>
-                                                <TableCell>{row.begins}</TableCell>
-                                                <TableCell>{row.ends}</TableCell>
-                                                <TableCell>{row.returned}</TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        
+                        <DataTable
+                            columns={[
+                                {
+                                    title: 'Equipment',
+                                    name: 'equipmentId',
+                                    getCellValue: (row) => getEquipmentName(row.equipmentId),
+                                },
+                                {
+                                    title: "User",
+                                    name: 'userId',
+                                    getCellValue: (row) => getUserName(row.userId),
+                                },
+                                {
+                                    title: "Begin",
+                                    name: 'begins',
+                                },
+                                {
+                                    title: "Ends",
+                                    name: "ends",
+                                    
+                                },
+                                {
+                                    title: "Returned",
+                                    name: "returned",
+                                },
+                            ]}
+                            rows={loans}
+                        />
                     </Paper>
-                    </div>
+                </div>
         );
     }
 }
