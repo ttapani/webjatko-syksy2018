@@ -9,7 +9,7 @@ import Router, { withRouter, SingletonRouter } from 'next/router';
 
 interface ILayoutProps extends WithStyles<typeof styles> {
     title?: string;
-    router?: SingletonRouter;
+    router: SingletonRouter;
 }
 
 interface ILayoutState {

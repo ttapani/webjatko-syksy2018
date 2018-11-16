@@ -7,6 +7,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@devexpress/dx-react-core": "^1.9.0",
+    "@devexpress/dx-react-grid": "^1.9.0",
+    "@devexpress/dx-react-grid-material-ui": "^1.9.0",
     "@material-ui/core": "3.4.0",
     "@material-ui/icons": "3.0.1",
     "@zeit/next-typescript": "1.1.1",
@@ -18,7 +21,7 @@
   },
   "devDependencies": {
     "@types/next": "7.0.4",
-    "@types/react": "16.0.36"
+    "@types/react": "16.7.6"
   },
   "license": "ISC"
 }

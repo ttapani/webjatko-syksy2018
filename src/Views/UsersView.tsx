@@ -1,12 +1,8 @@
 import React from 'react';
-import { WithStyles, Theme, createStyles, withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import { WithStyles, createStyles, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import users from '../AppData/users';
+import DataTable from '../Containers/DataTable';
 
 interface IProps extends WithStyles<typeof styles> {
 
@@ -16,7 +12,7 @@ interface IState {
 
 }
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     root: {
         width: '100%',
         overflowX: 'auto',
@@ -38,28 +34,25 @@ class UsersView extends React.Component<IProps, IState> {
         const { classes } = this.props;
         return (
             <div className={classes.tableContainer}>
-                <Paper className={classes.root}>
-                    <Table className={classes.table}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Email</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {users.map(row => {
-                                return (
-                                    <TableRow key={row.id}>
-                                        <TableCell>{row.id}</TableCell>
-                                        <TableCell>{row.name}</TableCell>
-                                        <TableCell>{row.email}</TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </Paper>
+                    <Paper className={classes.root}>
+                        <DataTable
+                            columns={[
+                                {
+                                    title: 'ID',
+                                    name: 'id',
+                                },
+                                {
+                                    title: "Name",
+                                    name: 'name',
+                                },
+                                {
+                                    title: "Email",
+                                    name: 'email',
+                                },
+                            ]}
+                            rows={users}
+                        />
+                    </Paper>
             </div>
         );
     }
