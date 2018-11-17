@@ -2,7 +2,7 @@ import React from 'react';
 import { WithStyles, createStyles, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import users from '../AppData/users';
-import DataTable from '../Containers/DataTable';
+import DataTable from '../Containers/DataTable/DataTable';
 
 interface IProps extends WithStyles<typeof styles> {
 
@@ -37,10 +37,6 @@ class UsersView extends React.Component<IProps, IState> {
                     <Paper className={classes.root}>
                         <DataTable
                             columns={[
-                                {
-                                    title: 'ID',
-                                    name: 'id',
-                                },
                                 {
                                     title: "Name",
                                     name: 'name',

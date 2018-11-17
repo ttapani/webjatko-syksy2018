@@ -3,7 +3,7 @@ import { WithStyles, createStyles, withStyles } from '@material-ui/core/styles';
 import loans from '../AppData/loans';
 import equipments from '../AppData/equipments';
 import users from '../AppData/users';
-import DataTable from '../Containers/DataTable';
+import DataTable from '../Containers/DataTable/DataTable';
 import Paper from '@material-ui/core/Paper';
 
 interface IProps extends WithStyles<typeof styles> {
