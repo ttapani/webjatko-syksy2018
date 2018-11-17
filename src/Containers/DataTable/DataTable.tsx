@@ -9,10 +9,19 @@ import CommitButton from './CommitButton';
 import CancelButton from './CancelButton';
 import AddButton from './AddButton';
 import DeleteDialog from './DeleteDialog';
+import Input from '@material-ui/core/Input';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import TableCell from '@material-ui/core/TableCell';
+
+import users from '../../AppData/users';
+import equipments from '../../AppData/equipments';
 
 interface IProps extends WithStyles<typeof styles> {
     columns: Column[];
     rows: Array<any>;
+    tableColumnExtensions?: Array<any>;
+    editingColumnExtensions?: Array<any>;
 }
 
 interface IState {
@@ -20,12 +29,24 @@ interface IState {
     editingRowIds: Array<any>;
     rowChanges: object;
     deletingRows: Array<any>;
+    pageSizes: Array<number>;
 }
 
 const styles = (theme: Theme) => createStyles({
     table: {
         midWidth: 700,
-    }
+    },
+    lookupEditCell: {
+        paddingTop: theme.spacing.unit * 0.875,
+        paddingRight: theme.spacing.unit,
+        paddingLeft: theme.spacing.unit,
+    },
+    dialog: {
+        width: 'calc(100% - 16px)',
+    },
+    inputRoot: {
+        width: '100%',
+    },
 });
 
 const commandComponents = {
@@ -45,6 +66,45 @@ const Command = ({ id, onExecute }) => {
     );
 };
 
+const availableValues = {
+    equipmentId: equipments.map(row => row.name),
+    userId: users.map(row => row.name)
+};
+  
+const LookupEditCellBase = ({
+    availableColumnValues, value, onValueChange, classes,
+    }) => (
+    <TableCell
+        className={classes.lookupEditCell}
+    >
+        <Select
+        value={value}
+        onChange={event => onValueChange(event.target.value)}
+        input={(
+            <Input
+            classes={{ root: classes.inputRoot }}
+            />
+    )}
+        >
+        {availableColumnValues.map(item => (
+            <MenuItem key={item} value={item}>
+            {item}
+            </MenuItem>
+        ))}
+        </Select>
+    </TableCell>
+);
+export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })(LookupEditCellBase);
+
+const EditCell = (props) => {
+    const { column } = props;
+    const availableColumnValues = availableValues[column.name];
+    if (availableColumnValues) {
+        return <LookupEditCell {...props} availableColumnValues={availableColumnValues} />;
+    }
+    return <TableEditRow.Cell {...props} />;
+};
+
 // Maps the data's id for the grid to use
 const getRowId = row => row.id;
 
@@ -56,6 +116,7 @@ class DataTable extends React.Component<IProps, IState> {
             deletingRows: [],
             editingRowIds: [],
             rowChanges: {},
+            pageSizes: [5, 10, 15, 0]
         };
     }
 
@@ -128,18 +189,25 @@ class DataTable extends React.Component<IProps, IState> {
                     />
                     <IntegratedPaging/>
                     <EditingState
+                        columnExtensions={this.props.editingColumnExtensions}
                         editingRowIds={this.state.editingRowIds}
                         onEditingRowIdsChange={this.changeEditingRowIds}
                         rowChanges={this.state.rowChanges}
                         onRowChangesChange={this.changeRowChanges}
                         onCommitChanges={this.commitChanges}
                     />
-                    <Table/>
+                    <Table
+                        columnExtensions={this.props.tableColumnExtensions}
+                    />
                     <TableHeaderRow showSortingControls/>
                     <Toolbar/>
-                    <PagingPanel/>
+                    <PagingPanel
+                        pageSizes={this.state.pageSizes}
+                    />
                     <SearchPanel/>
-                    <TableEditRow/>
+                    <TableEditRow
+                        cellComponent={EditCell}
+                    />
                     <TableEditColumn
                         width={170}
                         showAddCommand

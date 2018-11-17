@@ -28,11 +28,35 @@ const styles = () => createStyles({
 });
 
 const getEquipmentName = (id: string) => {
-    return equipments.find(equipment => equipment.id === id).name;
+    let equipment = equipments.find(equipment => equipment.id === id);
+    if(equipment)
+        return equipment.name;
+    else
+        return '';
 }
 
 const getUserName = (id: string) => {
-    return users.find(users => users.id === id).name;
+    let user = users.find(users => users.id === id)
+    if(user)
+        return user.name;
+    else
+        return '';
+}
+
+const getEquipmentId = (name: string) => {
+    let equipment = equipments.find(equipment => equipment.name === name);
+    if(equipment)
+        return equipment.id;
+    else
+        return '';
+}
+
+const getUserId = (name: string) => {
+    let user = users.find(users => users.name === name)
+    if(user)
+        return user.id;
+    else
+        return '';
 }
 
 class LoansView extends React.Component<IProps, IState> {
@@ -70,6 +94,16 @@ class LoansView extends React.Component<IProps, IState> {
                                 {
                                     title: "Returned",
                                     name: "returned",
+                                },
+                            ]}
+                            editingColumnExtensions={[
+                                {
+                                  columnName: 'equipmentId',
+                                  createRowChange: (row, value) => ({ equipmentId: getEquipmentId(value) }),
+                                },
+                                {
+                                  columnName: 'userId',
+                                  createRowChange: (row, value) => ({ userId: getUserId(value) }),
                                 },
                             ]}
                             rows={loans}
