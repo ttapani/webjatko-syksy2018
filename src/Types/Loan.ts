@@ -1,5 +1,5 @@
 export interface Loan {
-    ID: string,
+    id: string,
     name: string,
     equipment: string,
     percentage: string,
