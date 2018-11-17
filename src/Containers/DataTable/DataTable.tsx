@@ -4,8 +4,11 @@ import { Grid, Table, TableHeaderRow, SearchPanel, Toolbar, PagingPanel, TableEd
 import { Column, SearchState, SortingState, IntegratedSorting, IntegratedFiltering } from '@devexpress/dx-react-grid';
 import { PagingState, IntegratedPaging, EditingState } from '@devexpress/dx-react-grid';
 import DeleteButton from './DeleteButton';
+import EditButton from './EditButton';
+import CommitButton from './CommitButton';
+import CancelButton from './CancelButton';
+import AddButton from './AddButton';
 import DeleteDialog from './DeleteDialog';
-import { Loan } from '../../Types/Loan';
 
 interface IProps extends WithStyles<typeof styles> {
     columns: Column[];
@@ -14,6 +17,8 @@ interface IProps extends WithStyles<typeof styles> {
 
 interface IState {
     rows: Array<any>;
+    editingRowIds: Array<any>;
+    rowChanges: object;
     deletingRows: Array<any>;
 }
 
@@ -24,6 +29,10 @@ const styles = (theme: Theme) => createStyles({
 });
 
 const commandComponents = {
+    add: AddButton,
+    edit: EditButton,
+    commit: CommitButton,
+    cancel: CancelButton,
     delete: DeleteButton,
 };
 
@@ -42,7 +51,12 @@ const getRowId = row => row.id;
 class DataTable extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
-        this.state = { rows: this.props.rows, deletingRows: [] };
+        this.state = {
+            rows: this.props.rows,
+            deletingRows: [],
+            editingRowIds: [],
+            rowChanges: {},
+        };
     }
 
     getStateRows = () => {
@@ -60,13 +74,21 @@ class DataTable extends React.Component<IProps, IState> {
     deleteRows = () => {
         const rows = this.getStateRows().slice();
         this.getStateDeletingRows().forEach((rowId) => {
-          const index = rows.findIndex(row => row.id === rowId);
-          if (index > -1) {
-            rows.splice(index, 1);
-          }
+            const index = rows.findIndex(row => row.id === rowId);
+            if (index > -1) {
+                rows.splice(index, 1);
+            }
         });
         this.setState({ rows, deletingRows: [] });
     };
+
+    changeEditingRowIds = (editingRowIds) => {
+        this.setState({ editingRowIds });
+    }
+
+    changeRowChanges = (rowChanges) => {
+        this.setState({ rowChanges });
+    }
 
     commitChanges = ({ added, changed, deleted }) => {
         let { rows } = this.state;
@@ -106,6 +128,10 @@ class DataTable extends React.Component<IProps, IState> {
                     />
                     <IntegratedPaging/>
                     <EditingState
+                        editingRowIds={this.state.editingRowIds}
+                        onEditingRowIdsChange={this.changeEditingRowIds}
+                        rowChanges={this.state.rowChanges}
+                        onRowChangesChange={this.changeRowChanges}
                         onCommitChanges={this.commitChanges}
                     />
                     <Table/>
@@ -115,6 +141,9 @@ class DataTable extends React.Component<IProps, IState> {
                     <SearchPanel/>
                     <TableEditRow/>
                     <TableEditColumn
+                        width={170}
+                        showAddCommand
+                        showEditCommand
                         showDeleteCommand
                         commandComponent={Command}
                     />
