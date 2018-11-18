@@ -7,10 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import NoSsr from '@material-ui/core/NoSsr';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
-import CancelIcon from '@material-ui/icons/Cancel';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 interface IProps extends WithStyles<typeof styles> {
     title: string;
@@ -148,7 +145,7 @@ const components = {
     ValueContainer,
 };
             
-class IntegrationReactSelect extends React.Component<IProps, null> {
+class ItemSelect extends React.Component<IProps, null> {
     constructor(props: IProps) {
         super(props);
     }
@@ -170,6 +167,8 @@ class IntegrationReactSelect extends React.Component<IProps, null> {
             <div className={classes.root}>
                 <NoSsr>
                     <Select
+                        // Required to render menu on top of scrollable containers
+                        menuPortalTarget={document.body}
                         classes={classes}
                         styles={selectStyles}
                         options={this.props.suggestions}
@@ -184,4 +183,4 @@ class IntegrationReactSelect extends React.Component<IProps, null> {
     }
 }
             
-export default withStyles(styles, { withTheme: true })(IntegrationReactSelect);
+export default withStyles(styles, { withTheme: true })(ItemSelect);

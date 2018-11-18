@@ -9,11 +9,7 @@ import CommitButton from './CommitButton';
 import CancelButton from './CancelButton';
 import AddButton from './AddButton';
 import DeleteDialog from './DeleteDialog';
-import Input from '@material-ui/core/Input';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import TableCell from '@material-ui/core/TableCell';
-import InputLabel from '@material-ui/core/InputLabel';
 
 import ItemSelect from './ItemSelect';
 
@@ -86,29 +82,13 @@ const LookupEditCellBase = ({
     <TableCell
         className={classes.lookupEditCell}
     >
-         <ItemSelect
+        <ItemSelect
             classes={{ root: classes.inputRoot }}
             title={column.title}
             value={value}
             suggestions={availableColumnValues.map(item => ({ label: item, value: item }))}
             handleValueChange={(event) => onValueChange(event.value)}
         />
-{/*          <Select
-        value={value}
-        onChange={event => onValueChange(event.target.value)}
-        input={(
-            <Input
-            name={column.title}
-            classes={{ root: classes.inputRoot }}
-            />
-    )}
-        >
-        {availableColumnValues.map(item => (
-            <MenuItem key={item} value={item}>
-            {item}
-            </MenuItem>
-        ))}
-        </Select> */}
     </TableCell>
 );
 export const LookupEditCell = withStyles(styles)(LookupEditCellBase);
@@ -246,6 +226,7 @@ class DataTable extends React.Component<IProps, IState> {
                     />
                     <Table
                         columnExtensions={this.props.tableColumnExtensions}
+                        
                     />
                     <TableHeaderRow showSortingControls/>
                     <Toolbar/>
