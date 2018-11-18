@@ -14,6 +14,10 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import TableCell from '@material-ui/core/TableCell';
 
+import { DatePicker } from 'material-ui-pickers';
+import { format } from 'date-fns'
+import { KeyboardArrowRight, KeyboardArrowLeft } from '@material-ui/icons'
+
 import users from '../../AppData/users';
 import equipments from '../../AppData/equipments';
 
@@ -98,11 +102,33 @@ const LookupEditCellBase = ({
 );
 export const LookupEditCell = withStyles(styles)(LookupEditCellBase);
 
+const DatePickerCellBase = ({ value, onValueChange, title, classes }) => (
+        <TableCell className={classes.lookupEditCell}>
+            <DatePicker
+                allowKeyboardControl
+                clearable
+                autoOk
+                label={title}
+                value={value ? value : null}
+                // Format date back into db format
+                onChange={(date) => onValueChange(date ? format(date, 'yyyy-MM-dd') : null)}
+                animateYearScrolling
+                format="dd/MM/yyyy"
+                leftArrowIcon={<KeyboardArrowLeft/>}
+                rightArrowIcon={<KeyboardArrowRight/>}
+            />
+        </TableCell>
+);
+export const DatePickerCell = withStyles(styles)(DatePickerCellBase);
+
 const EditCell = (props) => {
     const { column } = props;
     const availableColumnValues = availableValues[column.name];
     if (availableColumnValues) {
         return <LookupEditCell {...props} availableColumnValues={availableColumnValues} />;
+    }
+    if (column.name === 'begins' || column.name === 'ends' || column.name === 'returned') {
+        return <DatePickerCell {...props} title={column.title} />;
     }
     return <TableEditRow.Cell {...props} />;
 };
@@ -158,17 +184,19 @@ class DataTable extends React.Component<IProps, IState> {
     commitChanges = ({ added, changed, deleted }) => {
         let { rows } = this.state;
         if (added) {
-          const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
-          rows = [
-            ...rows,
-            ...added.map((row, index) => ({
-              id: startingAddedId + index,
-              ...row,
-            })),
-          ];
+            // To conform to the fake data for now
+            const startingAddedId = rows.length > 0 ? Number.parseInt(rows[rows.length - 1].id) + 1 : 0;
+            rows = [
+                ...rows,
+                ...added.map((row, index) => ({
+                // To conform to the fake data for now
+                id: (startingAddedId + index).toString().padStart(3, '0'),
+                ...row,
+                })),
+            ];
         }
         if (changed) {
-          rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+            rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
         }
         this.setState({ rows, deletingRows: deleted || this.getStateDeletingRows() });
     }
