@@ -83,7 +83,7 @@ class LoansView extends React.Component<IProps, IState> {
                                     getCellValue: (row) => getUserName(row.userId),
                                 },
                                 {
-                                    title: "Begin",
+                                    title: "Begins",
                                     name: 'begins',
                                 },
                                 {
