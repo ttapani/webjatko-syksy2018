@@ -30,6 +30,8 @@ interface IState {
     rowChanges: object;
     deletingRows: Array<any>;
     pageSizes: Array<number>;
+    pageSize: number;
+    currentPage: number;
 }
 
 const styles = (theme: Theme) => createStyles({
@@ -116,7 +118,9 @@ class DataTable extends React.Component<IProps, IState> {
             deletingRows: [],
             editingRowIds: [],
             rowChanges: {},
-            pageSizes: [5, 10, 15, 0]
+            pageSizes: [5, 10, 15, 0],
+            pageSize: 5,
+            currentPage: 0,
         };
     }
 
@@ -169,6 +173,9 @@ class DataTable extends React.Component<IProps, IState> {
         this.setState({ rows, deletingRows: deleted || this.getStateDeletingRows() });
     }
 
+    changeCurrentPage = currentPage => this.setState({ currentPage })
+    changePageSize = pageSize => this.setState({ pageSize });
+
     public render(): React.ReactNode {
         const { columns } = this.props;
         const { rows } = this.state;
@@ -184,8 +191,10 @@ class DataTable extends React.Component<IProps, IState> {
                     <SearchState/>
                     <IntegratedFiltering/>
                     <PagingState
-                        defaultCurrentPage={0}
-                        pageSize={5}
+                        currentPage={this.state.currentPage}
+                        onCurrentPageChange={this.changeCurrentPage}
+                        onPageSizeChange={this.changePageSize}
+                        pageSize={this.state.pageSize}
                     />
                     <IntegratedPaging/>
                     <EditingState
