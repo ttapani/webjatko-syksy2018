@@ -106,7 +106,7 @@ const DatePickerCellBase = ({ value, onValueChange, title, classes }) => (
                 // Format date back into db format
                 onChange={(date) => onValueChange(date ? format(date, 'yyyy-MM-dd') : null)}
                 animateYearScrolling
-                format="dd/MM/yyyy"
+                format="PP"
                 leftArrowIcon={<KeyboardArrowLeft/>}
                 rightArrowIcon={<KeyboardArrowRight/>}
             />
@@ -115,7 +115,7 @@ const DatePickerCellBase = ({ value, onValueChange, title, classes }) => (
 export const DatePickerCell = withStyles(styles)(DatePickerCellBase);
 
 const DateFormatter = ({ value }) => {
-    return value ? format(parse(value, 'yyyy-MM-dd', new Date()), 'P', { locale: fi }) : '';
+    return value ? format(parse(value, 'yyyy-MM-dd', new Date()), 'PP', { locale: fi }) : '';
 }
 
 const DateTypeProvider = props => (
