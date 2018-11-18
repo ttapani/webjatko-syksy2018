@@ -34,7 +34,8 @@ class DeleteDialog extends React.Component<IProps, IState> {
         
         return (
             <Dialog
-            fullScreen={fullScreen}
+            fullWidth
+            maxWidth='md'
             open={this.props.open}
             aria-labelledby="responsive-dialog-title"
             >
