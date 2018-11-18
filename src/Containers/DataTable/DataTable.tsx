@@ -96,7 +96,7 @@ const LookupEditCellBase = ({
         </Select>
     </TableCell>
 );
-export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })(LookupEditCellBase);
+export const LookupEditCell = withStyles(styles)(LookupEditCellBase);
 
 const EditCell = (props) => {
     const { column } = props;
