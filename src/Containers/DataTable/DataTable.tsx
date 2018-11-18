@@ -2,7 +2,7 @@ import React from 'react';
 import { WithStyles, createStyles, withStyles, Theme } from '@material-ui/core/styles';
 import { Grid, Table, TableHeaderRow, SearchPanel, Toolbar, PagingPanel, TableEditColumn, TableEditRow  } from '@devexpress/dx-react-grid-material-ui';
 import { Column, SearchState, SortingState, IntegratedSorting, IntegratedFiltering } from '@devexpress/dx-react-grid';
-import { PagingState, IntegratedPaging, EditingState } from '@devexpress/dx-react-grid';
+import { PagingState, IntegratedPaging, EditingState, DataTypeProvider } from '@devexpress/dx-react-grid';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 import CommitButton from './CommitButton';
@@ -14,7 +14,8 @@ import TableCell from '@material-ui/core/TableCell';
 import ItemSelect from './ItemSelect';
 
 import { DatePicker } from 'material-ui-pickers';
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
+import { fi } from 'date-fns/locale'
 import { KeyboardArrowRight, KeyboardArrowLeft } from '@material-ui/icons'
 
 import users from '../../AppData/users';
@@ -35,6 +36,7 @@ interface IState {
     pageSizes: Array<number>;
     pageSize: number;
     currentPage: number;
+    dateColumns: Array<string>;
 }
 
 const styles = (theme: Theme) => createStyles({
@@ -112,6 +114,17 @@ const DatePickerCellBase = ({ value, onValueChange, title, classes }) => (
 );
 export const DatePickerCell = withStyles(styles)(DatePickerCellBase);
 
+const DateFormatter = ({ value }) => {
+    return value ? format(parse(value, 'yyyy-MM-dd', new Date()), 'P', { locale: fi }) : '';
+}
+
+const DateTypeProvider = props => (
+    <DataTypeProvider
+      formatterComponent={DateFormatter}
+      {...props}
+    />
+);
+
 const EditCell = (props) => {
     const { column } = props;
     const availableColumnValues = availableValues[column.name];
@@ -138,6 +151,7 @@ class DataTable extends React.Component<IProps, IState> {
             pageSizes: [5, 10, 15, 0],
             pageSize: 10,
             currentPage: 0,
+            dateColumns: ['begins', 'ends', 'returned'],
         };
     }
 
@@ -223,6 +237,9 @@ class DataTable extends React.Component<IProps, IState> {
                         rowChanges={this.state.rowChanges}
                         onRowChangesChange={this.changeRowChanges}
                         onCommitChanges={this.commitChanges}
+                    />
+                    <DateTypeProvider
+                        for={this.state.dateColumns}
                     />
                     <Table
                         columnExtensions={this.props.tableColumnExtensions}
