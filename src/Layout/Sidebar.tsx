@@ -19,7 +19,7 @@ const drawerWidth = 240;
 
 const styles = (theme: Theme) => createStyles({
     drawer: {
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             width: drawerWidth,
             flexShrink: 0,
         },
@@ -47,7 +47,7 @@ class SideBar extends React.Component<ISidebarProps, ISidebarState> {
         return (
             <>
             <div className={classes.drawer}>
-                <Hidden xsDown={true} implementation="css">
+                <Hidden smDown={true} implementation="css">
                     <Drawer
                         variant="permanent"
                         classes={{ paper: classes.drawerPaper }}
@@ -62,7 +62,7 @@ class SideBar extends React.Component<ISidebarProps, ISidebarState> {
                     <List>{mainListItems}</List>
                     </Drawer>
                 </Hidden>
-                <Hidden smUp={true} implementation="css">
+                <Hidden mdUp={true} implementation="css">
                     <Drawer
                         variant="temporary"
                         open={this.props.mobileOpen}
