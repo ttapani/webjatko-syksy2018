@@ -31,6 +31,7 @@ interface IProps extends WithStyles<typeof styles> {
     tableColumnExtensions?: Array<any>;
     editingColumnExtensions?: Array<any>;
     mapAvailableValues?: [string, Function];
+    onRowsChange?: (data) => void;
 }
 
 interface IState {
@@ -195,6 +196,7 @@ class DataTable extends React.Component<IProps, IState> {
             }
         });
         this.setState({ rows, deletingRows: [] });
+        this.props.onRowsChange(rows);
     };
 
     changeEditingRowIds = (editingRowIds) => {
@@ -206,7 +208,7 @@ class DataTable extends React.Component<IProps, IState> {
     }
 
     commitChanges = ({ added, changed, deleted }) => {
-        let { rows } = this.state;
+        let { rows } = this.props;
         if (added) {
             // To conform to the fake data for now
             const startingAddedId = rows.length > 0 ? Number.parseInt(rows[rows.length - 1].id) + 1 : 0;
@@ -223,6 +225,7 @@ class DataTable extends React.Component<IProps, IState> {
             rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
         }
         this.setState({ rows, deletingRows: deleted || this.getStateDeletingRows() });
+        this.props.onRowsChange(rows);
     }
 
     changeCurrentPage = currentPage => this.setState({ currentPage })
@@ -240,7 +243,7 @@ class DataTable extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         const { columns } = this.props;
-        const { rows } = this.state;
+        const { rows } = this.props;
         return (
             <>
                 <Grid
