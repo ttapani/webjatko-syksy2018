@@ -5,6 +5,7 @@ import equipments from '../AppData/equipments';
 import users from '../AppData/users';
 import DataTable from '../Containers/DataTable/DataTable';
 import Paper from '@material-ui/core/Paper';
+import { Loan } from '../Types/Loan';
 
 interface IProps extends WithStyles<typeof styles> {
 
@@ -59,6 +60,21 @@ const getUserId = (name: string) => {
         return '';
 }
 
+export class LoanInterval {
+    constructor(readonly begins: string, readonly ends: string, readonly returned: string) {
+    }
+}
+
+export const getReservedIntervals = (equipmentId: string, dataSet: Array<any>) => {
+    const intervals = Array<LoanInterval>();
+    const matches = dataSet.filter(item => item.equipmentId === equipmentId);
+    console.log("item " + equipmentId);
+    if(matches.length > 0) {
+        matches.map((item) => intervals.push(new LoanInterval(item.begins, item.ends, item.returned)));
+    }
+    return intervals;
+}
+
 class LoansView extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -107,6 +123,7 @@ class LoansView extends React.Component<IProps, IState> {
                                 },
                             ]}
                             rows={loans}
+                            mapAvailableValues={["equipmentId", getReservedIntervals]}
                         />
                     </Paper>
                 </div>
