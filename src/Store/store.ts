@@ -8,6 +8,9 @@ import { EquipmentState } from './equipment/types';
 import userReducer from './users/reducers';
 import { UserState } from './users/types';
 
+import loanReducer from './loans/reducers';
+import { LoanState } from './loans/types';
+
 import { combineReducers, Reducer } from 'redux';
 
 const exampleInitialState = {
@@ -17,6 +20,7 @@ const exampleInitialState = {
 export interface ApplicationState {
     equipment: EquipmentState,
     users: UserState,
+    loans: LoanState,
     counter: {
         count: number,
     }
@@ -45,6 +49,7 @@ export const addCount = () => dispatch => {
 export const reducers: Reducer<ApplicationState> = combineReducers<ApplicationState>({
     equipment: equipmentReducer,
     users: userReducer,
+    loans: loanReducer,
     counter: reducer,
 });
 
