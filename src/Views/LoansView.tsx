@@ -11,6 +11,8 @@ import { Loan, LoanAction } from '../Store/loans/types';
 import { User } from '../Store/users/types';
 import { Equipment } from '../Store/equipment/types';
 
+import { getIdByName, getNameById } from '../Helpers/data';
+
 interface IProps extends WithStyles<typeof styles> {
 }
 
@@ -68,40 +70,8 @@ class LoansView extends React.Component<IAllProps, IState> {
         this.props.setLoans(data);
     }
 
-    getEquipmentName = (id: string) => {
-        let equipment = this.props.equipment.find(equipment => equipment.id === id);
-        if(equipment)
-            return equipment.name;
-        else
-            return '';
-    }
-    
-    getUserName = (id: string) => {
-        let user = this.props.users.find(users => users.id === id)
-        if(user)
-            return user.name;
-        else
-            return '';
-    }
-    
-    getEquipmentId = (name: string) => {
-        let equipment = this.props.equipment.find(equipment => equipment.name === name);
-        if(equipment)
-            return equipment.id;
-        else
-            return '';
-    }
-    
-    getUserId = (name: string) => {
-        let user = this.props.users.find(users => users.name === name)
-        if(user)
-            return user.id;
-        else
-            return '';
-    }
-
     public render(): React.ReactNode {
-        const { classes, loans } = this.props;
+        const { classes, loans, equipment, users } = this.props;
         return (
                 <div className={classes.tableContainer}>
                     <Paper className={classes.root}>
@@ -110,12 +80,12 @@ class LoansView extends React.Component<IAllProps, IState> {
                                 {
                                     title: 'Equipment',
                                     name: 'equipmentId',
-                                    getCellValue: (row) => this.getEquipmentName(row.equipmentId),
+                                    getCellValue: (row) => getNameById(row.equipmentId, equipment),
                                 },
                                 {
                                     title: "User",
                                     name: 'userId',
-                                    getCellValue: (row) => this.getUserName(row.userId),
+                                    getCellValue: (row) => getNameById(row.userId, users),
                                 },
                                 {
                                     title: "Begins",
@@ -134,11 +104,11 @@ class LoansView extends React.Component<IAllProps, IState> {
                             editingColumnExtensions={[
                                 {
                                   columnName: 'equipmentId',
-                                  createRowChange: (row, value) => ({ equipmentId: this.getEquipmentId(value) }),
+                                  createRowChange: (row, value) => ({ equipmentId: getIdByName(value, equipment) }),
                                 },
                                 {
                                   columnName: 'userId',
-                                  createRowChange: (row, value) => ({ userId: this.getUserId(value) }),
+                                  createRowChange: (row, value) => ({ userId: getIdByName(value, users) }),
                                 },
                             ]}
                             rows={loans}
