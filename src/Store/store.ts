@@ -4,6 +4,10 @@ import thunkMiddleware from 'redux-thunk'
 
 import equipmentReducer from './equipment/reducers';
 import { EquipmentState } from './equipment/types';
+
+import userReducer from './users/reducers';
+import { UserState } from './users/types';
+
 import { combineReducers, Reducer } from 'redux';
 
 const exampleInitialState = {
@@ -12,6 +16,7 @@ const exampleInitialState = {
 
 export interface ApplicationState {
     equipment: EquipmentState,
+    users: UserState,
     counter: {
         count: number,
     }
@@ -39,6 +44,7 @@ export const addCount = () => dispatch => {
 
 export const reducers: Reducer<ApplicationState> = combineReducers<ApplicationState>({
     equipment: equipmentReducer,
+    users: userReducer,
     counter: reducer,
 });
 

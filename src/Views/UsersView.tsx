@@ -1,11 +1,17 @@
 import React from 'react';
 import { WithStyles, createStyles, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import users from '../AppData/users';
 import DataTable from '../Containers/DataTable/DataTable';
 
-interface IProps extends WithStyles<typeof styles> {
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
+import { setUsers } from '../Store/users/actions';
+import { ApplicationState } from '../Store/store';
+import { UserState, User, UserAction } from '../Store/users/types';
 
+interface IProps extends WithStyles<typeof styles> {
+    users: User[];
+    setUsers: (data) => void;
 }
 
 interface IState {
@@ -30,8 +36,12 @@ class UsersView extends React.Component<IProps, IState> {
         super(props);
     }
 
+    setUsers = (data) => {
+        this.props.setUsers(data);
+    }
+
     public render(): React.ReactNode {
-        const { classes } = this.props;
+        const { classes, users } = this.props;
         return (
             <div className={classes.tableContainer}>
                     <Paper className={classes.root}>
@@ -47,6 +57,7 @@ class UsersView extends React.Component<IProps, IState> {
                                 },
                             ]}
                             rows={users}
+                            onRowsChange={this.setUsers}
                         />
                     </Paper>
             </div>
@@ -54,4 +65,12 @@ class UsersView extends React.Component<IProps, IState> {
     }
 }
 
-export default withStyles(styles)(UsersView);
+const mapStateToProps = ({ users: { users }}: ApplicationState): UserState => ({ users })
+
+const mapDispatchToProps = (dispatch: Dispatch<UserAction>) => {
+    return {
+        setUsers: bindActionCreators(setUsers, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(UsersView));
