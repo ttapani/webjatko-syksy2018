@@ -4,13 +4,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
 import DialogDeleteButton from './DialogDeleteButton';
 import DialogCancelButton from './DialogCancelButton';
 import { Grid, Table, TableHeaderRow } from '@devexpress/dx-react-grid-material-ui';
 import { Column } from '@devexpress/dx-react-grid';
 import Paper from '@material-ui/core/Paper';
-import { WithWidth } from '@material-ui/core/withWidth';
 
 interface IProps {
     rows: any[];
@@ -30,8 +28,6 @@ class DeleteDialog extends React.Component<IProps, IState> {
     }
     
     render() {
-        const { fullScreen } = this.context;
-        
         return (
             <Dialog
             fullWidth

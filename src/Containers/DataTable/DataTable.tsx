@@ -8,8 +8,8 @@ import EditButton from './EditButton';
 import CommitButton from './CommitButton';
 import CancelButton from './CancelButton';
 import AddButton from './AddButton';
-import DeleteDialog from './DeleteDialog';
-
+import DeleteDialog from './DeleteDialog/DeleteDialog';
+import { connectProps } from '@devexpress/dx-react-core'
 import withTableData from './withTableData';
 import DateTypeProvider from './DateTypeProvider';
 import EditCell from './EditCell';
@@ -87,7 +87,7 @@ class DataTable extends React.Component<IProps, IState> {
         return deletingRows;
     }
     
-    cancelDelete = () => this.setState({ deletingRows: [] });
+    cancelDelete = () => this.setState({ deletingRows: [] })
 
     deleteRows = () => {
         const rows = this.getStateRows().slice();
@@ -130,8 +130,8 @@ class DataTable extends React.Component<IProps, IState> {
         this.props.onRowsChange(rows);
     }
 
-    changeCurrentPage = currentPage => this.setState({ currentPage })
-    changePageSize = pageSize => this.setState({ pageSize });
+    changeCurrentPage = (currentPage) => this.setState({ currentPage })
+    changePageSize = (pageSize) => this.setState({ pageSize })
 
     changeAddedRows = (addedRows) => this.setState({
         addedRows: addedRows.map(row => (Object.keys(row).length ? row : {
@@ -188,7 +188,7 @@ class DataTable extends React.Component<IProps, IState> {
                     />
                     <SearchPanel/>
                     <TableEditRow
-                        cellComponent={withTableData(this.state.rows)(EditCell)}
+                        cellComponent={EditCell}
                     />
                     <TableEditColumn
                         width={170}

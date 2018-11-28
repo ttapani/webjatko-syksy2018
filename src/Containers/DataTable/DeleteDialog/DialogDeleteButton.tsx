@@ -23,7 +23,7 @@ const styles = (theme: Theme) => createStyles({
 
 const DialogDeleteButton: React.SFC<IProps> = (props: IProps) => {
     return (
-        <Button autoFocus variant='contained' onClick={props.onExecute} color='primary' className={props.classes.button}>
+        <Button variant='contained' onClick={props.onExecute} color='primary' className={props.classes.button}>
             Delete
             <DeleteIcon className={props.classes.icon}/>
         </Button>
