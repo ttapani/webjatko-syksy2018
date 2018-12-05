@@ -9,7 +9,6 @@ import CommitButton from './CommitButton';
 import CancelButton from './CancelButton';
 import AddButton from './AddButton';
 import DeleteDialog from './DeleteDialog/DeleteDialog';
-import { connectProps } from '@devexpress/dx-react-core'
 import withTableData from './withTableData';
 import DateTypeProvider from './DateTypeProvider';
 import EditCell from './EditCell';
@@ -19,7 +18,7 @@ interface IProps extends WithStyles<typeof styles> {
     rows: Array<any>;
     tableColumnExtensions?: Array<any>;
     editingColumnExtensions?: Array<any>;
-    mapAvailableValues?: [string, Function];
+    appData?: any;
     onRowsChange?: (data) => void;
 }
 
@@ -149,12 +148,12 @@ class DataTable extends React.Component<IProps, IState> {
     });
 
 
-    getPropsRows = () => {
+    getAppData = () => {
         const { rows } = this.props;
-        return rows;
+        return { loans: rows, users: this.props.appData ? this.props.appData.users : [], equipment: this.props.appData ? this.props.appData.equipment: [] };
     }
     // Store a component when the class is instantiated so a re-render does not call it again
-    private EditCellWithData = withTableData(this.getPropsRows)(EditCell);
+    private EditCellWithData = withTableData(this.getAppData)(EditCell);
 
     public render(): React.ReactNode {
         const { columns } = this.props;

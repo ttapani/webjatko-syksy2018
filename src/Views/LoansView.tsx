@@ -113,7 +113,7 @@ class LoansView extends React.Component<IAllProps, IState> {
                             ]}
                             rows={loans}
                             onRowsChange={this.setLoans}
-                            mapAvailableValues={["equipmentId", getReservedIntervals]}
+                            appData={{equipment: equipment, users: users }}
                         />
                     </Paper>
                 </div>
