@@ -14,9 +14,7 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-const LookupEditCellBase = ({
-    availableColumnValues, value, onValueChange, classes, column,
-    }) => (
+const LookupEditCellBase = ({availableColumnValues, value, onValueChange, classes, column}) => (
     <TableCell
         className={classes.lookupEditCell}
     >

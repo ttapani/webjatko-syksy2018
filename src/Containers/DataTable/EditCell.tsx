@@ -6,6 +6,7 @@ import LookupEditCell from './LookupEditCell';
 import DatePickerCell from './DatePickerCell';
 import users from '../../AppData/users';
 import equipments from '../../AppData/equipments';
+import loans from '../../AppData/loans';
 
 const availableValues = {
     equipmentId: equipments.map(row => row.name),
@@ -15,15 +16,13 @@ const availableValues = {
 const EditCell = (props) => {
     const { column } = props;
     const availableColumnValues = availableValues[column.name];
-    {console.log("komponentissa on: ")}
-    {console.log(props)}
     if (availableColumnValues) {
         return <LookupEditCell {...props} availableColumnValues={availableColumnValues} />;
     }
     if (column.name === 'begins' || column.name === 'ends' || column.name === 'returned') {
         let intervals = Array<LoanInterval>();
         if (props.row.equipmentId !== null) {
-            intervals = getReservedIntervals(props.row.equipmentId, props.data);
+            intervals = getReservedIntervals(props.row.equipmentId, props.data());
         }
         return <DatePickerCell {...props} title={column.title} reservations={intervals} />;
     }

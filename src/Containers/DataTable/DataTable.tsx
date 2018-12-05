@@ -77,6 +77,11 @@ class DataTable extends React.Component<IProps, IState> {
     // Maps the data's id for the grid to use
     getRowId = row => row.id;
 
+    getStateAddedRows = () => {
+        const { addedRows } = this.state;
+        return addedRows;
+    }
+
     getStateRows = () => {
         const { rows } = this.state;
         return rows;
@@ -126,7 +131,7 @@ class DataTable extends React.Component<IProps, IState> {
         if (changed) {
             rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
         }
-        this.setState({ rows, deletingRows: deleted || this.getStateDeletingRows() });
+        this.setState({ deletingRows: deleted || this.getStateDeletingRows() });
         this.props.onRowsChange(rows);
     }
 
@@ -142,6 +147,14 @@ class DataTable extends React.Component<IProps, IState> {
           returned: null
         })),
     });
+
+
+    getPropsRows = () => {
+        const { rows } = this.props;
+        return rows;
+    }
+    // Store a component when the class is instantiated so a re-render does not call it again
+    private EditCellWithData = withTableData(this.getPropsRows)(EditCell);
 
     public render(): React.ReactNode {
         const { columns } = this.props;
@@ -188,7 +201,8 @@ class DataTable extends React.Component<IProps, IState> {
                     />
                     <SearchPanel/>
                     <TableEditRow
-                        cellComponent={EditCell}
+                        // needs to be a readily returned component, not a function call
+                        cellComponent={this.EditCellWithData}
                     />
                     <TableEditColumn
                         width={170}
