@@ -23,7 +23,7 @@ class DashboardView extends React.Component<IProps, IState> {
         const { classes } = this.props;
         return (
             <Typography variant='h3'>
-                Welcome to Loan system.
+                Welcome!
             </Typography>
         );
     }

@@ -18,20 +18,20 @@ const drawerWidth = 240;
 const styles = (theme: Theme) => createStyles({
     appBar: {
         marginLeft: drawerWidth,
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             width: `calc(100% - ${drawerWidth}px)`,
         },
         zIndex: theme.zIndex.drawer + 1,
     },
     title: {
         flexGrow: 1,
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             marginLeft: 12 + 24,
         },
     },
     menuButton: {
         marginRight: 20,
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             display: 'none',
         },
     },

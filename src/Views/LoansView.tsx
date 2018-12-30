@@ -1,14 +1,32 @@
 import React from 'react';
 import { WithStyles, createStyles, withStyles } from '@material-ui/core/styles';
-import loans from '../AppData/loans';
-import equipments from '../AppData/equipments';
-import users from '../AppData/users';
-import DataTable from '../Containers/DataTable';
+import DataTable from '../Containers/DataTable/DataTable';
 import Paper from '@material-ui/core/Paper';
 
-interface IProps extends WithStyles<typeof styles> {
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
+import { setLoans } from '../Store/loans/actions';
+import { ApplicationState } from '../Store/store';
+import { Loan, LoanAction } from '../Store/loans/types';
+import { User } from '../Store/users/types';
+import { Equipment } from '../Store/equipment/types';
 
+import { getIdByName, getNameById } from '../Helpers/data';
+
+interface IProps extends WithStyles<typeof styles> {
 }
+
+interface IStateProps {
+    loans: Loan[];
+    equipment: Equipment[];
+    users: User[];
+}
+
+interface IDispatchProps {
+    setLoans: (data) => void;
+}
+
+type IAllProps = IProps & IStateProps & IDispatchProps;
 
 interface IState {
 
@@ -27,22 +45,33 @@ const styles = () => createStyles({
     },
 });
 
-const getEquipmentName = (id: string) => {
-    return equipments.find(equipment => equipment.id === id).name;
+export class LoanInterval {
+    constructor(readonly begins: string, readonly ends: string, readonly returned: string) {
+    }
 }
 
-const getUserName = (id: string) => {
-    return users.find(users => users.id === id).name;
+export const getReservedIntervals = (equipmentId: string, dataSet: Array<any>) => {
+    const intervals = Array<LoanInterval>();
+    const matches = dataSet.filter(item => item.equipmentId === equipmentId);
+    console.log("item " + equipmentId);
+    if(matches.length > 0) {
+        matches.map((item) => intervals.push(new LoanInterval(item.begins, item.ends, item.returned)));
+    }
+    return intervals;
 }
 
-class LoansView extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+class LoansView extends React.Component<IAllProps, IState> {
+    constructor(props: IAllProps) {
         super(props);
 
     }
 
+    setLoans = (data) => {
+        this.props.setLoans(data);
+    }
+
     public render(): React.ReactNode {
-        const { classes } = this.props;
+        const { classes, loans, equipment, users } = this.props;
         return (
                 <div className={classes.tableContainer}>
                     <Paper className={classes.root}>
@@ -51,15 +80,15 @@ class LoansView extends React.Component<IProps, IState> {
                                 {
                                     title: 'Equipment',
                                     name: 'equipmentId',
-                                    getCellValue: (row) => getEquipmentName(row.equipmentId),
+                                    getCellValue: (row) => getNameById(row.equipmentId, equipment),
                                 },
                                 {
                                     title: "User",
                                     name: 'userId',
-                                    getCellValue: (row) => getUserName(row.userId),
+                                    getCellValue: (row) => getNameById(row.userId, users),
                                 },
                                 {
-                                    title: "Begin",
+                                    title: "Begins",
                                     name: 'begins',
                                 },
                                 {
@@ -72,7 +101,19 @@ class LoansView extends React.Component<IProps, IState> {
                                     name: "returned",
                                 },
                             ]}
+                            editingColumnExtensions={[
+                                {
+                                  columnName: 'equipmentId',
+                                  createRowChange: (row, value) => ({ equipmentId: getIdByName(value, equipment) }),
+                                },
+                                {
+                                  columnName: 'userId',
+                                  createRowChange: (row, value) => ({ userId: getIdByName(value, users) }),
+                                },
+                            ]}
                             rows={loans}
+                            onRowsChange={this.setLoans}
+                            appData={{equipment: equipment, users: users }}
                         />
                     </Paper>
                 </div>
@@ -80,4 +121,12 @@ class LoansView extends React.Component<IProps, IState> {
     }
 }
 
-export default withStyles(styles)(LoansView);
+const mapStateToProps = ({ loans: { loans }, equipment: { equipment }, users: { users }}: ApplicationState): IStateProps => ({ loans, equipment, users })
+
+const mapDispatchToProps = (dispatch: Dispatch<LoanAction>) => {
+    return {
+        setLoans: bindActionCreators(setLoans, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(LoansView));
