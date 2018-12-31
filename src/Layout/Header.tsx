@@ -6,6 +6,7 @@ import ToolBar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import { AccountCircle } from '@material-ui/icons';
 
 
 interface IHeaderProps extends WithStyles<typeof styles> {
@@ -25,9 +26,9 @@ const styles = (theme: Theme) => createStyles({
     },
     title: {
         flexGrow: 1,
-        [theme.breakpoints.up('md')]: {
+/*         [theme.breakpoints.up('md')]: {
             marginLeft: 12 + 24,
-        },
+        }, */
     },
     menuButton: {
         marginRight: 20,
@@ -56,9 +57,15 @@ class Header extends React.Component<IHeaderProps, null> {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" color="inherit" noWrap={true}>
+                    <Typography variant="h6" color="inherit" noWrap={true} className={classes.title}>
                         {title}
                     </Typography>
+                    <Typography variant="subtitle1" color="inherit" noWrap={true}>
+                        Guest
+                    </Typography>
+                    <IconButton color="inherit">
+                        <AccountCircle />
+                    </IconButton>
                 </ToolBar>
             </AppBar>
         );
