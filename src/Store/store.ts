@@ -11,48 +11,27 @@ import { UserState } from './users/types';
 import loanReducer from './loans/reducers';
 import { LoanState } from './loans/types';
 
+import loginReducer from './login/reducers';
+import { LoginState } from './login/types';
+
 import { combineReducers, Reducer } from 'redux';
 
-const exampleInitialState = {
-    count: 0,
-} 
+import thunk from 'redux-thunk'
 
 export interface ApplicationState {
     equipment: EquipmentState,
     users: UserState,
     loans: LoanState,
-    counter: {
-        count: number,
-    }
+    login: LoginState,
 };
-
-export const actionTypes = {
-    ADD: 'ADD',
-}
-
-// REDUCERS
-export const reducer = (state = exampleInitialState, action) => {
-    switch (action.type) {
-        case actionTypes.ADD:
-            return Object.assign({}, state, {
-                count: state.count + 1
-            })
-        default: return state
-    }
-}
-
-// ACTIONS
-export const addCount = () => dispatch => {
-    return dispatch({ type: actionTypes.ADD })
-}
 
 export const reducers: Reducer<ApplicationState> = combineReducers<ApplicationState>({
     equipment: equipmentReducer,
     users: userReducer,
     loans: loanReducer,
-    counter: reducer,
+    login: loginReducer,
 });
 
 export const initStore = (initialState) => {
-    return createStore(reducers, initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)))
+    return createStore(reducers, initialState, composeWithDevTools(/* applyMiddleware(thunkMiddleware), */ applyMiddleware(thunk)))
 }
