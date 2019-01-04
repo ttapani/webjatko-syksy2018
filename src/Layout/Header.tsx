@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { AccountCircle } from '@material-ui/icons';
 import { ApplicationState } from 'src/Store/store';
-import { User, LoginState, LoginAction } from 'src/Store/login/types';
+import { Session, LoginState, LoginAction } from 'src/Store/login/types';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../src/Store/login/actions';
@@ -21,7 +21,7 @@ interface IHeaderProps extends WithStyles<typeof styles> {
 }
 
 interface StateProps {
-    user: User;
+    session: Session;
 }
 
 interface DispatchProps {
@@ -93,7 +93,7 @@ class Header extends React.Component<Props, null> {
                         color="secondary"
                         className={classes.userButton}   
                     >
-                        {this.props.user.userName}
+                        {this.props.session.userName}
                         <AccountCircle className={classes.rightIcon}/>
                     </Button>
                     <Button
@@ -109,7 +109,7 @@ class Header extends React.Component<Props, null> {
     }
 }
 
-const mapStateToProps = ({ login: { user, isLoading, error }}: ApplicationState): StateProps => ({ user });
+const mapStateToProps = ({ login: { session, isLoading, error }}: ApplicationState): StateProps => ({ session });
 const mapDispatchToProps = (dispatch: ThunkDispatch<LoginState, undefined, LoginAction>, ownProps: IHeaderProps): DispatchProps => {
     return {
         logoutUser: async() => {
