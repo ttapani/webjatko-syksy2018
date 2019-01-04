@@ -1,14 +1,14 @@
 import { Reducer } from 'redux';
 import { LoginState, LoginAction } from './types';
 
+export const guestUser = { userId: null, userName: "Guest", type: 'guest' };
+
 export const initialState: LoginState = {
-    session: { userId: null, userName: null, type: 'guest' },
+    session: guestUser,
     //user: null,
     isLoading: false,
     error: null,
 };
-
-export const guestUser = { userId: null, userName: null, type: 'guest' };
 
 const loanReducer: Reducer<LoginState> = (state: LoginState = initialState, action) => {
     switch ((action as LoginAction).type) {
