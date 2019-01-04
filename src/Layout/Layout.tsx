@@ -65,7 +65,9 @@ class Layout extends React.Component<IProps, ILayoutState> {
             console.log('error at loading page');
         };
 
-        this.props.refreshUser();
+        this.props.refreshUser().catch(() => {
+            console.log("no user to refresh");
+        });
     }
 
     public render(): React.ReactNode {
