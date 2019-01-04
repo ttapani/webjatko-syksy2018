@@ -12,25 +12,27 @@ import { User } from '../Store/users/types';
 import { Equipment } from '../Store/equipment/types';
 
 import { getIdByName, getNameById } from '../Helpers/data';
+import { Session } from 'src/Store/login/types';
+import Error from 'next/error'
 
 interface IProps extends WithStyles<typeof styles> {
+}
+
+interface IState {
 }
 
 interface IStateProps {
     loans: Loan[];
     equipment: Equipment[];
     users: User[];
+    session: Session;
 }
 
 interface IDispatchProps {
     setLoans: (data) => void;
 }
 
-type IAllProps = IProps & IStateProps & IDispatchProps;
-
-interface IState {
-
-}
+type Props = IProps & IStateProps & IDispatchProps;
 
 const styles = () => createStyles({
     root: {
@@ -60,8 +62,8 @@ export const getReservedIntervals = (equipmentId: string, dataSet: Array<any>) =
     return intervals;
 }
 
-class LoansView extends React.Component<IAllProps, IState> {
-    constructor(props: IAllProps) {
+class LoansView extends React.Component<Props, IState> {
+    constructor(props: Props) {
         super(props);
 
     }
@@ -72,6 +74,9 @@ class LoansView extends React.Component<IAllProps, IState> {
 
     public render(): React.ReactNode {
         const { classes, loans, equipment, users } = this.props;
+        if(this.props.session.type == "guest") {
+            return <Error statusCode={403} />;
+        }
         return (
                 <div className={classes.tableContainer}>
                     <Paper className={classes.root}>
@@ -121,7 +126,7 @@ class LoansView extends React.Component<IAllProps, IState> {
     }
 }
 
-const mapStateToProps = ({ loans: { loans }, equipment: { equipment }, users: { users }}: ApplicationState): IStateProps => ({ loans, equipment, users })
+const mapStateToProps = ({ loans: { loans }, equipment: { equipment }, users: { users }, login: { session }}: ApplicationState): IStateProps => ({ loans, equipment, users, session })
 
 const mapDispatchToProps = (dispatch: Dispatch<LoanAction>) => {
     return {
@@ -129,4 +134,4 @@ const mapDispatchToProps = (dispatch: Dispatch<LoanAction>) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(LoansView));
+export default connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(withStyles(styles)(LoansView));
