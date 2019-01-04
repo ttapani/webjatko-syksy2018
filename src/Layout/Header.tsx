@@ -103,7 +103,8 @@ class Header extends React.Component<Props, null> {
                     <Button
                         variant="contained"
                         color="secondary"
-                        className={classes.userButton}   
+                        className={classes.userButton}
+                        disabled={this.props.session.type == "guest"} 
                     >
                         {this.props.session.userName}
                         <AccountCircle className={classes.rightIcon}/>
