@@ -1,7 +1,6 @@
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -17,6 +16,10 @@ import { loginUser } from '../src/Store/login/actions';
 import { ApplicationState } from '../src/Store/store';
 import { User, UserCredentials, LoginAction, LoginState } from '../src/Store/login/types';
 import { ThunkDispatch } from 'redux-thunk';
+import grey from '@material-ui/core/colors/grey';
+
+import Router from 'next/router'
+import { CircularProgress, Snackbar } from '@material-ui/core';
 
 const styles = (theme: Theme) => createStyles({
     main: {
@@ -39,7 +42,7 @@ const styles = (theme: Theme) => createStyles({
     },
     avatar: {
       margin: theme.spacing.unit,
-      backgroundColor: theme.palette.secondary.main,
+      backgroundColor: grey[700]
     },
     form: {
       width: '100%', // Fix IE 11 issue.
@@ -48,64 +51,141 @@ const styles = (theme: Theme) => createStyles({
     submit: {
       marginTop: theme.spacing.unit * 3,
     },
+    loading: {
+        margin: theme.spacing.unit * 2,
+    },
+    notLoading: {
+        margin: theme.spacing.unit * 2,
+        visibility: "hidden",
+    },
+    close: {
+        padding: theme.spacing.unit / 2,
+    },
 });
 
 interface IProps extends WithStyles<typeof styles> {
 
 }
 
+interface IState {
+    email: string;
+    password: string;
+    errorOccured: boolean;
+}
+
 interface StateProps {
     user: User;
-    isLoading: Boolean;
-    error: String;
+    isLoading: boolean;
+    error?: string;
 }
 
 interface DispatchProps {
-    loginUser: (credentials: UserCredentials) => void;
+    loginUser: (credentials: UserCredentials) => Promise<void>;
 }
 
 type Props = StateProps & IProps & DispatchProps;
 
-const LoginPage: React.SFC<Props> = (props: Props) => {
-    const { classes } = props;
+class LoginPage extends React.Component<Props, IState> {
+    constructor(props: Props) {
+        super(props)
+        this.onEmailChange = this.onEmailChange.bind(this);
+        this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
+        this.handleErrorClose = this.handleErrorClose.bind(this);
+        this.onErrorClosed = this.onErrorClosed.bind(this);
+        this.state = { email: "", password: "", errorOccured: false };
+    }
 
-    return (
-      <main className={classes.main}>
-        <CssBaseline />
-        <Paper className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
-          <form className={classes.form} method="POST">
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input id="email" name="email" autoComplete="email" autoFocus />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input name="password" type="password" id="password" autoComplete="current-password" />
-            </FormControl>
-{/*             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={(event) => { event.preventDefault(); console.log("login clicked"); props.loginUser({ userName: "xd", password: "xdd" }) }}
-            >
-              Login
-            </Button>
-          </form>
-        </Paper>
-      </main>
-    );
+    private onEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({ email: event.target.value });
+    }
+
+    private onPasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({ password: event.target.value });
+    }
+
+    private handleLogin(event: React.MouseEvent<HTMLElement>) {
+        const { email, password } = this.state;
+        const { error } = this.props;
+        event.preventDefault();
+        this.setState({ errorOccured: false });
+        console.log("login clicked");
+        this.props.loginUser({ userName: email, password: password }).then(() => {
+            console.log("login succesful")
+            Router.push("/");
+        }).catch(() => {
+            console.log("login failed, reason: " + error);
+            this.setState({ errorOccured: true });
+        });
+    }
+
+    private handleErrorClose(event: React.MouseEvent<HTMLElement>, reason: string) {
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({ errorOccured: false });
+    }
+
+    private onErrorClosed(event: React.MouseEvent<HTMLElement>) {
+        this.setState({ errorOccured: false });
+    }
+
+    public render(): React.ReactNode {
+      const { classes, isLoading } = this.props;
+      const { email, password } = this.state;
+
+      return (
+        <main className={classes.main}>
+            <Snackbar
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}
+                open={this.state.errorOccured}
+                autoHideDuration={4000}
+                onClose={this.handleErrorClose}
+                ContentProps={{
+                    'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">{this.props.error}</span>}
+            />
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Login
+                </Typography>
+                <CircularProgress className={isLoading ? classes.loading : classes.notLoading} />
+                <form className={classes.form} method="POST">
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="email">Email Address</InputLabel>
+                        <Input disabled={isLoading} id="email" name="email" autoComplete="email" autoFocus value={email} onChange={this.onEmailChange} />
+                    </FormControl>
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="password">Password</InputLabel>
+                        <Input name="password" type="password" id="password" autoComplete="current-password" value={password} onChange={this.onPasswordChange} />
+                    </FormControl>
+                {/* <FormControlLabel
+                    control={<Checkbox value="remember" color="primary" />}
+                    label="Remember me"
+                    /> */}
+                    <Button
+                        disabled={isLoading}
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={this.handleLogin}
+                    >
+                        Login
+                    </Button>
+                </form>
+            </Paper>
+        </main>
+      );
+    }
 }
 
 const mapStateToProps = ({ login: { user, isLoading, error }}: ApplicationState): StateProps => ({ user, isLoading, error })
@@ -114,11 +194,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<LoginState, undefined, Login
     return {
         loginUser: async(credentials: UserCredentials) => {
             await dispatch(loginUser(credentials))
-            console.log("login completed")
         }
     }
 }
 
 export default connect<StateProps, DispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(withStyles(styles)(LoginPage));
-
-//export default withStyles(styles)(LoginPage);
