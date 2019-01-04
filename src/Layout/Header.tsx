@@ -124,6 +124,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<LoginState, undefined, Login
     }
 }
 
-export default connect<StateProps, DispatchProps, IHeaderProps>(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Header));
+export default withStyles(styles)(connect<StateProps, DispatchProps, IHeaderProps>(mapStateToProps, mapDispatchToProps)(Header));
 
 // export default withStyles(styles)(Header);

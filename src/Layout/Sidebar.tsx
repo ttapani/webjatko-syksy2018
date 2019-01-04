@@ -139,4 +139,4 @@ class SideBar extends React.Component<Props, ISidebarState> {
 
 const mapStateToProps = ({ login: { session }}: ApplicationState): StateProps => ({ session });
 
-export default connect<StateProps, null, ISidebarProps>(mapStateToProps, null)(withStyles(styles)(SideBar));
+export default withStyles(styles)(connect<StateProps, null, ISidebarProps>(mapStateToProps, null)(SideBar));
