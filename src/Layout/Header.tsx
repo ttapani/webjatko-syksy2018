@@ -68,12 +68,24 @@ class Header extends React.Component<Props, null> {
 
     private handleLogout(event: React.MouseEvent<HTMLButtonElement>) {
         this.props.logoutUser().then(() => {
-            Router.push("/login");
+            Router.push("/");
         });
+    }
+
+    private handleLogin(event: React.MouseEvent<HTMLButtonElement>) {
+        Router.push("/login");
     }
     
     public render(): React.ReactNode {
         const { classes, title } = this.props;
+        let loginStateButton;
+
+        if(this.props.session.type != "guest") {
+            loginStateButton = <Button color="inherit" className={classes.userButton} onClick={this.handleLogout}>Logout</Button>;
+        } else {
+            loginStateButton = <Button color="inherit" className={classes.userButton} onClick={this.handleLogin}>Login</Button>;
+        }
+
         return (
             <AppBar position="absolute" className={classes.appBar}>
                 <ToolBar>
@@ -96,20 +108,14 @@ class Header extends React.Component<Props, null> {
                         {this.props.session.userName}
                         <AccountCircle className={classes.rightIcon}/>
                     </Button>
-                    <Button
-                        color="inherit"
-                        className={classes.userButton}
-                        onClick={this.handleLogout}
-                    >
-                        Logout                        
-                    </Button>
+                    {loginStateButton}
                 </ToolBar>
             </AppBar>
         );
     }
 }
 
-const mapStateToProps = ({ login: { session, isLoading, error }}: ApplicationState): StateProps => ({ session });
+const mapStateToProps = ({ login: { session }}: ApplicationState): StateProps => ({ session });
 const mapDispatchToProps = (dispatch: ThunkDispatch<LoginState, undefined, LoginAction>, ownProps: IHeaderProps): DispatchProps => {
     return {
         logoutUser: async() => {
