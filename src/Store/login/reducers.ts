@@ -22,6 +22,12 @@ const loanReducer: Reducer<LoginState> = (state: LoginState = initialState, acti
             return { ...state, isLoading: true };
         case 'login/LOGOUT_SUCCESS':
             return { ...state, session: guestUser, isLoading: false };
+        case 'login/REFRESH_USER_STARTED':
+            return state;
+        case 'login/REFRESH_USER_SUCCESS':
+            return { ...state, session: action.payload.session };
+        case 'login/REFRESH_USER_FAILURE':
+            return { ...state, session: guestUser };
         default:
             return state;
     }

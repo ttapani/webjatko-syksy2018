@@ -37,4 +37,20 @@ export interface LogoutUserActionSuccess extends Action {
     type: 'login/LOGOUT_SUCCESS';
 }
 
-export type LoginAction = LoginUserStartedAction | LoginUserActionSuccess | LoginUserFailureAction | LogoutUserStartedAction | LogoutUserActionSuccess;
+export interface RefresUserStartedAction extends Action {
+    type: 'login/REFRESH_USER_STARTED';
+}
+
+export interface RefreshUserSuccessAction extends Action {
+    type: 'login/REFRESH_USER_SUCCESS';
+}
+
+export interface RefresUserFailureAction extends Action {
+    type: 'login/REFRESH_USER_FAILURE';
+}
+
+type LoginUserAction = LoginUserStartedAction | LoginUserActionSuccess | LoginUserFailureAction;
+type LogoutUserAction = LogoutUserStartedAction | LogoutUserActionSuccess;
+type RefreshUserAction = RefresUserStartedAction | RefreshUserSuccessAction | RefresUserFailureAction;
+
+export type LoginAction = LoginUserAction | LogoutUserAction | RefreshUserAction;
