@@ -11,7 +11,7 @@ import { Session } from 'src/Store/login/types';
 import { connect } from 'react-redux';
 import { ApplicationState } from 'src/Store/store';
 import MenuItem from './MenuItem';
-
+import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 
 interface ISidebarProps extends WithStyles<typeof styles> {
@@ -57,17 +57,26 @@ class SideBar extends React.Component<Props, ISidebarState> {
 
     public render(): React.ReactNode {
         const { classes } = this.props;
-        let adminMenu;
+        
+        let adminMenu: React.ReactNode;
         if(this.props.session.type == "admin") {
-            adminMenu =    <MenuItem href={'/users'}>
-            <ListItemIcon>
-                <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary="Users" />
-        </MenuItem>;
+            adminMenu = <MenuItem href={'/users'}>
+                            <ListItemIcon>
+                                <PersonIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Users" />
+                        </MenuItem>;
         }
         else {
-            adminMenu = <Divider />
+            adminMenu = <div />
+        }
+
+        let userMenu: React.ReactNode;
+        if(this.props.session.type != "guest") {
+            userMenu = <List>{mainListItems}</List>;
+        }
+        else {
+            userMenu = <div />
         }
 
         return (
@@ -84,8 +93,14 @@ class SideBar extends React.Component<Props, ISidebarState> {
                                 Loan system
                         </Typography>
                     </div>
+                    <MenuItem href={'/'}>
+                        <ListItemIcon>
+                            <HomeIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Home" />
+                        </MenuItem>
                     <Divider />
-                    <List>{mainListItems}</List>
+                    {userMenu}
                     <Divider /> 
                     {adminMenu}
                     </Drawer>
@@ -104,7 +119,14 @@ class SideBar extends React.Component<Props, ISidebarState> {
                         </Typography>
                     </div>
                     <Divider />
-                    <List>{mainListItems}</List>
+                    <MenuItem href={'/'}>
+                        <ListItemIcon>
+                            <HomeIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Home" />
+                    </MenuItem>
+                    <Divider /> 
+                    {userMenu}
                     <Divider /> 
                     {adminMenu}
                     </Drawer>
