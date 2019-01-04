@@ -23,6 +23,14 @@ export const loginUserFailure: ActionCreator<LoginAction> = (error: String) => (
     },
 });
 
+export const logoutUserStarted: ActionCreator<LoginAction> = () => ({
+    type: 'login/LOGOUT_STARTED',
+});
+
+export const logoutUserSuccess: ActionCreator<LoginAction> = () => ({
+    type: 'login/LOGOUT_SUCCESS',
+});
+
 export const loginUser = (credentials: UserCredentials): ThunkAction<Promise<void>, {}, {}, LoginAction> => {
     return async (dispatch: ThunkDispatch<{}, {}, LoginAction>): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
@@ -43,6 +51,19 @@ export const loginUser = (credentials: UserCredentials): ThunkAction<Promise<voi
     };
 };
 
+export const logoutUser = (): ThunkAction<Promise<void>, {}, {}, LoginAction> => {
+    return async (dispatch: ThunkDispatch<{}, {}, LoginAction>): Promise<void> => {
+        return new Promise<void>((resolve) => {
+            dispatch(logoutUserStarted())
+            console.log("logout in progress");
+            setTimeout(() => {
+                dispatch(logoutUserSuccess());
+                resolve()
+            }, 1000);
+        });
+    };
+};
+
 interface Response {
     userId?: string;
     userName?: string;
@@ -51,8 +72,10 @@ interface Response {
 }
 
 const fakelogin = (credentials: UserCredentials): Response => {
-    if(credentials.userName == "asd" && credentials.password == "asd") {
-        return { userId: "asd", userName: "keke", type: 'normal' };
+    if(credentials.userName == "user@example.com" && credentials.password == "basicpassword") {
+        return { userId: "user@example.com", userName: "Peruskäyttäjä", type: 'normal' };
+    } else if(credentials.userName == "admin@example.com" && credentials.password == "adminpassword") {
+        return { userId: "admin@example.com", userName: "Ylläpitäjä", type: 'admin' };
     } else {
         return { error: "Invalid email or password" };
     }
