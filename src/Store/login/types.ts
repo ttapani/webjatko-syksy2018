@@ -29,4 +29,12 @@ export interface LoginUserFailureAction extends Action {
     type: 'login/LOGIN_FAILURE';
 }
 
-export type LoginAction = LoginUserStartedAction | LoginUserActionSuccess | LoginUserFailureAction;
+export interface LogoutUserStartedAction extends Action {
+    type: 'login/LOGOUT_STARTED';
+}
+
+export interface LogoutUserActionSuccess extends Action {
+    type: 'login/LOGOUT_SUCCESS';
+}
+
+export type LoginAction = LoginUserStartedAction | LoginUserActionSuccess | LoginUserFailureAction | LogoutUserStartedAction | LogoutUserActionSuccess;
