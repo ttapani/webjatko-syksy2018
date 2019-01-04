@@ -5,14 +5,14 @@ export interface UserCredentials {
     password: string;
 }
 
-export interface User {
+export interface Session {
     userId?: string,
     userName?: string;
     type: string;
 }
 
 export interface LoginState {
-    user: User;
+    session: Session;
     isLoading: boolean;
     error?: string;
 }

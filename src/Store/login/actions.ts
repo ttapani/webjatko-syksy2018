@@ -1,5 +1,5 @@
 import { ActionCreator } from 'redux';
-import { LoginAction, User, UserCredentials } from './types';
+import { LoginAction, Session, UserCredentials } from './types';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export const loginUserStarted: ActionCreator<LoginAction> = (credentials: UserCredentials) => ({
@@ -9,7 +9,7 @@ export const loginUserStarted: ActionCreator<LoginAction> = (credentials: UserCr
     },
 });
 
-export const loginUserSuccess: ActionCreator<LoginAction> = (user: User) => ({
+export const loginUserSuccess: ActionCreator<LoginAction> = (user: Session) => ({
     type: 'login/LOGIN_SUCCESS',
     payload: {
         user,

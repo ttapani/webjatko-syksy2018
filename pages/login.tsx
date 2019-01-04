@@ -14,7 +14,7 @@ import { WithStyles, Theme, createStyles, withStyles } from '@material-ui/core/s
 import { connect } from 'react-redux'
 import { loginUser } from '../src/Store/login/actions';
 import { ApplicationState } from '../src/Store/store';
-import { User, UserCredentials, LoginAction, LoginState } from '../src/Store/login/types';
+import { Session, UserCredentials, LoginAction, LoginState } from '../src/Store/login/types';
 import { ThunkDispatch } from 'redux-thunk';
 import grey from '@material-ui/core/colors/grey';
 
@@ -74,7 +74,7 @@ interface IState {
 }
 
 interface StateProps {
-    user: User;
+    session: Session;
     isLoading: boolean;
     error?: string;
 }
@@ -188,7 +188,7 @@ class LoginPage extends React.Component<Props, IState> {
     }
 }
 
-const mapStateToProps = ({ login: { user, isLoading, error }}: ApplicationState): StateProps => ({ user, isLoading, error })
+const mapStateToProps = ({ login: { session, isLoading, error }}: ApplicationState): StateProps => ({ session, isLoading, error })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<LoginState, undefined, LoginAction>, ownProps: IProps): DispatchProps => {
     return {
