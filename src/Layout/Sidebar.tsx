@@ -1,11 +1,18 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { createStyles, WithStyles, Theme, Typography } from '@material-ui/core';
+import { createStyles, WithStyles, Theme, Typography, ListItemIcon, ListItemText } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import mainListItems from './MenuItems';
 import Hidden from '@material-ui/core/Hidden';
+import AdminMenuItems from './AdminMenuItems';
+import { Session } from 'src/Store/login/types';
+import { connect } from 'react-redux';
+import { ApplicationState } from 'src/Store/store';
+import MenuItem from './MenuItem';
+
+import PersonIcon from '@material-ui/icons/Person';
 
 interface ISidebarProps extends WithStyles<typeof styles> {
     mobileOpen: boolean;
@@ -14,6 +21,12 @@ interface ISidebarProps extends WithStyles<typeof styles> {
 interface ISidebarState {
     mobileOpen: boolean;
 }
+
+interface StateProps {
+    session: Session;
+}
+
+type Props = StateProps & ISidebarProps;
 
 const drawerWidth = 240;
 
@@ -36,14 +49,27 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-class SideBar extends React.Component<ISidebarProps, ISidebarState> {
-    constructor(props: ISidebarProps) {
+class SideBar extends React.Component<Props, ISidebarState> {
+    constructor(props: Props) {
         super(props);
         this.state = { mobileOpen: this.props.mobileOpen };
     }
 
     public render(): React.ReactNode {
         const { classes } = this.props;
+        let adminMenu;
+        if(this.props.session.type == "admin") {
+            adminMenu =    <MenuItem href={'/users'}>
+            <ListItemIcon>
+                <PersonIcon />
+            </ListItemIcon>
+            <ListItemText primary="Users" />
+        </MenuItem>;
+        }
+        else {
+            adminMenu = <Divider />
+        }
+
         return (
             <>
             <div className={classes.drawer}>
@@ -60,6 +86,8 @@ class SideBar extends React.Component<ISidebarProps, ISidebarState> {
                     </div>
                     <Divider />
                     <List>{mainListItems}</List>
+                    <Divider /> 
+                    {adminMenu}
                     </Drawer>
                 </Hidden>
                 <Hidden mdUp={true} implementation="css">
@@ -77,6 +105,8 @@ class SideBar extends React.Component<ISidebarProps, ISidebarState> {
                     </div>
                     <Divider />
                     <List>{mainListItems}</List>
+                    <Divider /> 
+                    {adminMenu}
                     </Drawer>
                 </Hidden>
             </div>
@@ -85,4 +115,6 @@ class SideBar extends React.Component<ISidebarProps, ISidebarState> {
     }
 }
 
-export default withStyles(styles)(SideBar);
+const mapStateToProps = ({ login: { session }}: ApplicationState): StateProps => ({ session });
+
+export default connect<StateProps, null, ISidebarProps>(mapStateToProps, null)(withStyles(styles)(SideBar));

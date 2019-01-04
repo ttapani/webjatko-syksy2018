@@ -7,16 +7,27 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { setUsers } from '../Store/users/actions';
 import { ApplicationState } from '../Store/store';
-import { UserState, User, UserAction } from '../Store/users/types';
+import { User, UserAction } from '../Store/users/types';
+import { Session } from 'src/Store/login/types';
+import Error from 'next/error'
 
 interface IProps extends WithStyles<typeof styles> {
-    users: User[];
-    setUsers: (data) => void;
 }
 
 interface IState {
 
 }
+
+interface StateProps {
+    users: User[];
+    session: Session;
+}
+
+interface DispatchProps {
+    setUsers: (data) => void;
+}
+
+type Props = StateProps & IProps & DispatchProps;
 
 const styles = () => createStyles({
     root: {
@@ -31,8 +42,8 @@ const styles = () => createStyles({
     }
 });
 
-class UsersView extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+class UsersView extends React.Component<Props, IState> {
+    constructor(props: Props) {
         super(props);
     }
 
@@ -42,6 +53,9 @@ class UsersView extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         const { classes, users } = this.props;
+        if(this.props.session.type != "admin") {
+            return <Error statusCode={403} />;
+        }
         return (
             <div className={classes.tableContainer}>
                     <Paper className={classes.root}>
@@ -65,7 +79,7 @@ class UsersView extends React.Component<IProps, IState> {
     }
 }
 
-const mapStateToProps = ({ users: { users }}: ApplicationState): UserState => ({ users })
+const mapStateToProps = ({ users: { users }, login: { session }}: ApplicationState): StateProps => ({ users, session })
 
 const mapDispatchToProps = (dispatch: Dispatch<UserAction>) => {
     return {
@@ -73,4 +87,4 @@ const mapDispatchToProps = (dispatch: Dispatch<UserAction>) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(UsersView));
+export default connect<StateProps, DispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(withStyles(styles)(UsersView));

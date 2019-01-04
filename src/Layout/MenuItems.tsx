@@ -4,7 +4,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ListIcon from '@material-ui/icons/List';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import PersonIcon from '@material-ui/icons/Person';
 import MenuItem from './MenuItem';
 
 const mainListItems = (
@@ -26,12 +25,6 @@ const mainListItems = (
             <ListIcon />
         </ListItemIcon>
         <ListItemText primary="Equipments" />
-    </MenuItem>
-    <MenuItem href={'/users'}>
-        <ListItemIcon>
-            <PersonIcon />
-        </ListItemIcon>
-        <ListItemText primary="Users" />
     </MenuItem>
   </div>
 );
