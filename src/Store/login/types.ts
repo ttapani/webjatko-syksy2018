@@ -1,20 +1,20 @@
 import { Action } from 'redux';
 
 export interface UserCredentials {
-    userName: String;
-    password: String;
+    userName: string;
+    password: string;
 }
 
 export interface User {
-    userId?: String,
-    userName?: String;
-    type: String;
+    userId?: string,
+    userName?: string;
+    type: string;
 }
 
 export interface LoginState {
     user: User;
-    isLoading: Boolean;
-    error?: String;
+    isLoading: boolean;
+    error?: string;
 }
 
 export interface LoginUserStartedAction extends Action {
