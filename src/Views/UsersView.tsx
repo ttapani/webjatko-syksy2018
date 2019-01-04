@@ -87,4 +87,4 @@ const mapDispatchToProps = (dispatch: Dispatch<UserAction>) => {
     }
 }
 
-export default connect<StateProps, DispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(withStyles(styles)(UsersView));
+export default withStyles(styles)(connect<StateProps, DispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(UsersView));

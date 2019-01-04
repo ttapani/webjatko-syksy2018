@@ -134,4 +134,4 @@ const mapDispatchToProps = (dispatch: Dispatch<LoanAction>) => {
     }
 }
 
-export default connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(withStyles(styles)(LoansView));
+export default withStyles(styles)(connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(LoansView));

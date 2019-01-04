@@ -85,4 +85,4 @@ const mapDispatchToProps = (dispatch: Dispatch<EquipmentAction>) => {
         setEquipment: bindActionCreators(setEquipment, dispatch)
     }
 }
-export default connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EquipmentsView));
+export default withStyles(styles)(connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(EquipmentsView));
