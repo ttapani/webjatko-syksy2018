@@ -90,7 +90,7 @@ class SideBar extends React.Component<Props, ISidebarState> {
                     >
                     <div className={classes.toolbar}>
                         <Typography variant="h6">
-                                Loan system
+                            Loan system
                         </Typography>
                     </div>
                     <MenuItem href={'/'}>
@@ -115,7 +115,7 @@ class SideBar extends React.Component<Props, ISidebarState> {
                     >
                     <div className={classes.toolbar}>
                         <Typography variant="h6">
-                                Loan system
+                            Loan system
                         </Typography>
                     </div>
                     <Divider />
