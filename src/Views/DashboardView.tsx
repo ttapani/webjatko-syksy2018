@@ -22,15 +22,8 @@ interface IDispatchProps {
 type Props = IProps & IStateProps & IDispatchProps;
 
 const styles = (theme: Theme) => createStyles({
-    root: {
-        width: '100%',
-        overflowX: 'auto',
-    },
     table: {
-        midWidth: 700,
-    },
-    tableContainer: {
-        height: 320,
+        marginTop: theme.spacing.unit,
     },
 });
 
@@ -41,7 +34,20 @@ class DashboardView extends React.Component<Props, IState> {
 
     public render(): React.ReactNode {
         if(this.props.session.type == "normal") {
-            return <LoansTable />
+            return (
+                <div>
+                <Typography variant='h3'>
+                    Welcome!
+                </Typography>
+                <hr/>
+                <Typography variant='body1'>
+                    Here are loans associated with you.
+                </Typography>
+                <div className={this.props.classes.table}>
+                    <LoansTable />
+                </div>
+                </div>
+            )
         } else if(this.props.session.type == "admin") {
             return (
                 <div>
