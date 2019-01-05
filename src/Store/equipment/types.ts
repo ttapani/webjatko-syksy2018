@@ -13,4 +13,17 @@ export interface SetEquipmentAction extends Action {
     type: 'equipment/SET';
 }
 
-export type EquipmentAction = SetEquipmentAction;
+export interface AddEquipmentAction extends Action {
+    type: 'equipment/ADD';
+}
+
+export interface UpdateEquipmentAction extends Action {
+    type: 'equipment/UPDATE';
+}
+
+export interface DeleteEquipmentAction extends Action {
+    type: 'equipment/REMOVE';
+}
+
+
+export type EquipmentAction = SetEquipmentAction | AddEquipmentAction | UpdateEquipmentAction | DeleteEquipmentAction;

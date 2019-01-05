@@ -5,7 +5,7 @@ import DataTable from '../Containers/DataTable/DataTable';
 
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
-import { setEquipment } from '../Store/equipment/actions';
+import { addEquipment, updateEquipment, removeEquipment } from '../Store/equipment/actions';
 import { ApplicationState } from '../Store/store';
 import { Equipment, EquipmentAction } from '../Store/equipment/types';
 import { Session } from 'src/Store/login/types';
@@ -23,7 +23,9 @@ interface IStateProps {
 }
 
 interface IDispatchProps {
-    setEquipment: (data) => void;
+    addEquipment: (data: Equipment[]) => void;
+    updateEquipment: (data: Equipment[]) => void;
+    removeEquipment: (data: string[]) => void;
 }
 
 type Props = IStateProps & IProps & IDispatchProps;
@@ -46,10 +48,6 @@ class EquipmentsView extends React.Component<Props, IState> {
         super(props);
     }
 
-    setEqupment = (data) => {
-        this.props.setEquipment(data);
-    }
-
     public render(): React.ReactNode {
         const { classes, equipment } = this.props;
         if(this.props.session.type == "guest") {
@@ -70,7 +68,9 @@ class EquipmentsView extends React.Component<Props, IState> {
                             },
                         ]}
                         rows={equipment}
-                        onRowsChange={this.setEqupment}
+                        onRowsChanged={this.props.updateEquipment}
+                        onRowsAdded={this.props.addEquipment}
+                        onRowsDeleted={this.props.removeEquipment}
                         readonly={this.props.session.type == "normal" ? true : false}
                     />
                 </Paper>
@@ -83,7 +83,9 @@ const mapStateToProps = ({ equipment: { equipment }, login: { session }}: Applic
 
 const mapDispatchToProps = (dispatch: Dispatch<EquipmentAction>) => {
     return {
-        setEquipment: bindActionCreators(setEquipment, dispatch)
+        addEquipment: bindActionCreators(addEquipment, dispatch),
+        updateEquipment: bindActionCreators(updateEquipment, dispatch),
+        removeEquipment: bindActionCreators(removeEquipment, dispatch),
     }
 }
 export default withStyles(styles)(connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(EquipmentsView));

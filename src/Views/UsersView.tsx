@@ -5,11 +5,11 @@ import DataTable from '../Containers/DataTable/DataTable';
 
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
-import { setUsers } from '../Store/users/actions';
 import { ApplicationState } from '../Store/store';
-import { User, UserAction } from '../Store/users/types';
+import { User, UsersAction } from '../Store/users/types';
 import { Session } from 'src/Store/login/types';
 import Error from 'next/error'
+import { addUsers, updateUsers, removeUsers } from '../Store/users/actions';
 
 interface IProps extends WithStyles<typeof styles> {
 }
@@ -24,7 +24,9 @@ interface StateProps {
 }
 
 interface DispatchProps {
-    setUsers: (data) => void;
+    addUsers: (data: User[]) => void;
+    updateUsers: (data: User[]) => void;
+    removeUsers: (data: string[]) => void;
 }
 
 type Props = StateProps & IProps & DispatchProps;
@@ -45,10 +47,6 @@ const styles = () => createStyles({
 class UsersView extends React.Component<Props, IState> {
     constructor(props: Props) {
         super(props);
-    }
-
-    setUsers = (data) => {
-        this.props.setUsers(data);
     }
 
     public render(): React.ReactNode {
@@ -77,7 +75,9 @@ class UsersView extends React.Component<Props, IState> {
                                 },
                             ]}
                             rows={users}
-                            onRowsChange={this.setUsers}
+                            onRowsChanged={this.props.updateUsers}
+                            onRowsAdded={this.props.addUsers}
+                            onRowsDeleted={this.props.removeUsers}
                         />
                     </Paper>
             </div>
@@ -87,9 +87,11 @@ class UsersView extends React.Component<Props, IState> {
 
 const mapStateToProps = ({ users: { users }, login: { session }}: ApplicationState): StateProps => ({ users, session })
 
-const mapDispatchToProps = (dispatch: Dispatch<UserAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<UsersAction>) => {
     return {
-        setUsers: bindActionCreators(setUsers, dispatch)
+        addUsers: bindActionCreators(addUsers, dispatch),
+        updateUsers: bindActionCreators(updateUsers, dispatch),
+        removeUsers: bindActionCreators(removeUsers, dispatch),
     }
 }
 

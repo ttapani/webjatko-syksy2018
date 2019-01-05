@@ -16,4 +16,17 @@ export interface SetUsersAction extends Action {
     type: 'users/SET';
 }
 
-export type UserAction = SetUsersAction;
+export interface AddUsersAction extends Action {
+    type: 'users/ADD';
+}
+
+export interface UpdateUsersAction extends Action {
+    type: 'users/UPDATE';
+}
+
+export interface DeleteUsersAction extends Action {
+    type: 'users/REMOVE';
+}
+
+
+export type UsersAction = SetUsersAction | AddUsersAction | UpdateUsersAction | DeleteUsersAction;
