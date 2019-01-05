@@ -7,6 +7,9 @@ export interface UserState {
 export interface User {
     id: string;
     name: string;
+    email: string;
+    description: string;
+    password: string;
 }
 
 export interface SetUsersAction extends Action {
