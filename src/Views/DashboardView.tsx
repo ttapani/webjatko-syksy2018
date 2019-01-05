@@ -37,7 +37,7 @@ class DashboardView extends React.Component<Props, IState> {
             return (
                 <div>
                 <Typography variant='h3'>
-                    Welcome!
+                    Welcome, {this.props.session.userName}!
                 </Typography>
                 <hr/>
                 <Typography variant='body1'>
