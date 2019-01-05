@@ -55,7 +55,6 @@ export const loginUser = (credentials: UserCredentials): ThunkAction<Promise<voi
         return new Promise<void>((resolve, reject) => {
             dispatch(loginUserStarted(credentials))
             console.log("login in progress");
-            console.log(credentials);
             setTimeout(() => {
                 let response = fakelogin(credentials, getState().users.users);
                 if(response.error == null) {
@@ -140,9 +139,9 @@ const fakelogin = (credentials: UserCredentials, users): Response => {
         return { error: "Invalid email or password" };
     } else if(matchingUsers.length == 1 && matchingUsers[0].password == credentials.password) {
         if(matchingUsers[0].name == "Ylläpitäjä") {
-            return { userId: matchingUsers[0].id, userName: matchingUsers[0].name, type: "admin" };
+            return { userId: matchingUsers[0].id, userName: matchingUsers[0].name, type: "admin", error: null };
         } else {
-            return { userId: matchingUsers[0].id, userName: matchingUsers[0].name, type: "normal" };
+            return { userId: matchingUsers[0].id, userName: matchingUsers[0].name, type: "normal", error: null };
         }
     }
 }
