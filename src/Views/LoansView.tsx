@@ -65,11 +65,15 @@ export const getReservedIntervals = (equipmentId: string, dataSet: Array<any>) =
 class LoansView extends React.Component<Props, IState> {
     constructor(props: Props) {
         super(props);
-
+        this.getUserLoans = this.getUserLoans.bind(this);
     }
 
     setLoans = (data) => {
         this.props.setLoans(data);
+    }
+
+    private getUserLoans() {
+        return this.props.loans.filter((loan) => loan.userId == this.props.session.userId);
     }
 
     public render(): React.ReactNode {
@@ -116,7 +120,7 @@ class LoansView extends React.Component<Props, IState> {
                                   createRowChange: (row, value) => ({ userId: getIdByName(value, users) }),
                                 },
                             ]}
-                            rows={loans}
+                            rows={this.props.session.type == "normal" ? this.getUserLoans() : loans}
                             onRowsChange={this.setLoans}
                             appData={{equipment: equipment, users: users }}
                         />
