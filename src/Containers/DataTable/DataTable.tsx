@@ -20,6 +20,7 @@ interface IProps extends WithStyles<typeof styles> {
     editingColumnExtensions?: Array<any>;
     appData?: any;
     onRowsChange?: (data) => void;
+    readonly?: boolean;
 }
 
 interface IState {
@@ -158,6 +159,7 @@ class DataTable extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const { columns } = this.props;
         const { rows } = this.props;
+        const { readonly } = this.props;
         return (
             <>
                 <Grid
@@ -185,6 +187,7 @@ class DataTable extends React.Component<IProps, IState> {
                         rowChanges={this.state.rowChanges}
                         onRowChangesChange={this.changeRowChanges}
                         onCommitChanges={this.commitChanges}
+                        columnEditingEnabled={readonly ? !readonly : true}
                     />
                     <DateTypeProvider
                         for={this.state.dateColumns}
@@ -204,10 +207,10 @@ class DataTable extends React.Component<IProps, IState> {
                         cellComponent={this.EditCellWithData}
                     />
                     <TableEditColumn
-                        width={170}
-                        showAddCommand
-                        showEditCommand
-                        showDeleteCommand
+                        width={readonly ? 35 : 170}
+                        showAddCommand={readonly ? !readonly : true}
+                        showEditCommand={readonly ? !readonly : true}
+                        showDeleteCommand={readonly ? !readonly : true}
                         commandComponent={Command}
                     />
                 </Grid>

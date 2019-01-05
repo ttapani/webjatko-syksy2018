@@ -61,7 +61,7 @@ class EquipmentsView extends React.Component<Props, IState> {
                     <DataTable
                         columns={[
                             {
-                                title: "User",
+                                title: "Name",
                                 name: 'name',
                             },
                             {
@@ -71,6 +71,7 @@ class EquipmentsView extends React.Component<Props, IState> {
                         ]}
                         rows={equipment}
                         onRowsChange={this.setEqupment}
+                        readonly={this.props.session.type == "normal" ? true : false}
                     />
                 </Paper>
             </div>
