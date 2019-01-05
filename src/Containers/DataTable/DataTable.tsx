@@ -12,6 +12,8 @@ import DeleteDialog from './DeleteDialog/DeleteDialog';
 import withTableData from './withTableData';
 import DateTypeProvider from './DateTypeProvider';
 import EditCell from './EditCell';
+import { Loan } from 'src/Store/loans/types';
+import { Item } from 'src/Store/Helpers/itemhelpers';
 
 interface IProps extends WithStyles<typeof styles> {
     columns: Column[];
@@ -19,7 +21,11 @@ interface IProps extends WithStyles<typeof styles> {
     tableColumnExtensions?: Array<any>;
     editingColumnExtensions?: Array<any>;
     appData?: any;
-    onRowsChange?: (data) => void;
+    readonly?: boolean;
+    onRowsChanged?: (data: Item[]) => void;
+    onRowsAdded?: (data: Item[]) => void;
+    onRowsDeleted?: (data: string[]) => void;
+    defaultUser?: string;
 }
 
 interface IState {
@@ -95,14 +101,8 @@ class DataTable extends React.Component<IProps, IState> {
 
     deleteRows = () => {
         const rows = this.getStateRows().slice();
-        this.getStateDeletingRows().forEach((rowId) => {
-            const index = rows.findIndex(row => row.id === rowId);
-            if (index > -1) {
-                rows.splice(index, 1);
-            }
-        });
+        this.props.onRowsDeleted(this.getStateDeletingRows());
         this.setState({ rows, deletingRows: [] });
-        this.props.onRowsChange(rows);
     };
 
     changeEditingRowIds = (editingRowIds) => {
@@ -114,24 +114,14 @@ class DataTable extends React.Component<IProps, IState> {
     }
 
     commitChanges = ({ added, changed, deleted }) => {
-        let { rows } = this.props;
         if (added) {
-            // To conform to the fake data for now
-            const startingAddedId = rows.length > 0 ? Number.parseInt(rows[rows.length - 1].id) + 1 : 0;
-            rows = [
-                ...rows,
-                ...added.map((row, index) => ({
-                // To conform to the fake data for now
-                id: (startingAddedId + index).toString().padStart(3, '0'),
-                ...row,
-                })),
-            ];
+            this.props.onRowsAdded(added);
         }
         if (changed) {
-            rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+            this.props.onRowsChanged(changed);
         }
         this.setState({ deletingRows: deleted || this.getStateDeletingRows() });
-        this.props.onRowsChange(rows);
+        //this.props.onRowsChange(rows);
     }
 
     changeCurrentPage = (currentPage) => this.setState({ currentPage })
@@ -139,25 +129,26 @@ class DataTable extends React.Component<IProps, IState> {
 
     changeAddedRows = (addedRows) => this.setState({
         addedRows: addedRows.map(row => (Object.keys(row).length ? row : {
-          equipmentId: null,
-          userId: null,
-          begins: null,
-          ends: null,
-          returned: null
+        //   equipmentId: null,
+           userId: this.props.defaultUser? this.props.defaultUser : null,
+        //   begins: null,
+        //   ends: null,
+        //   returned: null
         })),
     });
-
 
     getAppData = () => {
         const { rows } = this.props;
         return { loans: rows, users: this.props.appData ? this.props.appData.users : [], equipment: this.props.appData ? this.props.appData.equipment: [] };
     }
+
     // Store a component when the class is instantiated so a re-render does not call it again
     private EditCellWithData = withTableData(this.getAppData)(EditCell);
 
     public render(): React.ReactNode {
         const { columns } = this.props;
         const { rows } = this.props;
+        const { readonly } = this.props;
         return (
             <>
                 <Grid
@@ -185,6 +176,7 @@ class DataTable extends React.Component<IProps, IState> {
                         rowChanges={this.state.rowChanges}
                         onRowChangesChange={this.changeRowChanges}
                         onCommitChanges={this.commitChanges}
+                        columnEditingEnabled={readonly ? !readonly : true}
                     />
                     <DateTypeProvider
                         for={this.state.dateColumns}
@@ -204,15 +196,15 @@ class DataTable extends React.Component<IProps, IState> {
                         cellComponent={this.EditCellWithData}
                     />
                     <TableEditColumn
-                        width={170}
-                        showAddCommand
-                        showEditCommand
-                        showDeleteCommand
+                        width={readonly ? 35 : 170}
+                        showAddCommand={readonly ? !readonly : true}
+                        showEditCommand={readonly ? !readonly : true}
+                        showDeleteCommand={readonly ? !readonly : true}
                         commandComponent={Command}
                     />
                 </Grid>
                 <DeleteDialog
-                    rows={rows.filter(row => this.state.deletingRows.indexOf(row.id) > -1)}
+                    rows={this.state.rows.filter(row => this.state.deletingRows.indexOf(row.id) > -1)}
                     columns={columns}
                     open={this.state.deletingRows.length !== 0}
                     handleCancel={() => this.cancelDelete()}

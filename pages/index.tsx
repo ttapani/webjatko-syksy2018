@@ -4,7 +4,7 @@ import DashboardView from '../src/Views/DashboardView';
 
 const IndexPage: React.SFC<{}> = () => {
     return (
-        <Layout title={"Dashboard"}>
+        <Layout title={"Home"}>
             <DashboardView/>
         </Layout>
     );

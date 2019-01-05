@@ -8,7 +8,7 @@ import { IconButton } from '@material-ui/core';
 import isSameDay from 'date-fns/isSameDay'
 import isWithinInterval from 'date-fns/isWithinInterval'
 import red from '@material-ui/core/colors/red';
-import { LoanInterval } from 'src/Views/LoansView';
+import { LoanInterval } from '../LoansTable';
 import parse from 'date-fns/fp/parse';
 import isValid from 'date-fns/isValid'
 
@@ -98,7 +98,7 @@ class LoanDatePicker extends React.Component<IProps, IState> {
                     isLastDay = isSameDay(date, end);
                 }
                 else {
-                    console.error("you cant parse dates properly");
+                    // Something should be done?
                 }
                 if(dayIsBetween || isFirstDay || isLastDay)
                     break;
