@@ -3,6 +3,8 @@ import { LoginAction, Session, UserCredentials } from './types';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 import { TokenKey } from '../../Constants/AppConstants';
+import { ApplicationState } from '../store';
+import { User } from '../users/types';
 
 export const loginUserStarted: ActionCreator<LoginAction> = (credentials: UserCredentials) => ({
     type: 'login/LOGIN_STARTED',
@@ -48,14 +50,14 @@ export const refreshUserFailure: ActionCreator<LoginAction> = () => ({
     type: 'login/REFRESH_USER_FAILURE',
 })
 
-export const loginUser = (credentials: UserCredentials): ThunkAction<Promise<void>, {}, {}, LoginAction> => {
-    return async (dispatch: ThunkDispatch<{}, {}, LoginAction>): Promise<void> => {
+export const loginUser = (credentials: UserCredentials): ThunkAction<Promise<void>, ApplicationState, {}, LoginAction> => {
+    return async (dispatch: ThunkDispatch<ApplicationState, {}, LoginAction>, getState): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
             dispatch(loginUserStarted(credentials))
             console.log("login in progress");
             console.log(credentials);
             setTimeout(() => {
-                let response = fakelogin(credentials);
+                let response = fakelogin(credentials, getState().users.users);
                 if(response.error == null) {
                     dispatch(loginUserSuccess({ userId: response.userId, userName: response.userName, type: response.type }));
                     if(storageAvailable('localStorage')) {
@@ -132,16 +134,20 @@ interface Response {
     error?: string;
 }
 
-const fakelogin = (credentials: UserCredentials): Response => {
-    if(credentials.userName == "user@example.com" && credentials.password == "basicpassword") {
-        return { userId: "user@example.com", userName: "Peruskäyttäjä", type: 'normal' };
-    } else if(credentials.userName == "admin@example.com" && credentials.password == "adminpassword") {
-        return { userId: "admin@example.com", userName: "Ylläpitäjä", type: 'admin' };
-    } else {
+const fakelogin = (credentials: UserCredentials, users): Response => {
+    let matchingUsers = users.filter((user: User) => user.email == credentials.userName);
+    if(matchingUsers.length == 0) {
         return { error: "Invalid email or password" };
+    } else if(matchingUsers.length == 1 && matchingUsers[0].password == credentials.password) {
+        if(matchingUsers[0].name == "Ylläpitäjä") {
+            return { userId: matchingUsers[0].id, userName: matchingUsers[0].name, type: "admin" };
+        } else {
+            return { userId: matchingUsers[0].id, userName: matchingUsers[0].name, type: "normal" };
+        }
     }
 }
 
+// Blatantly copied from MDN
 function storageAvailable(type: string) {
     try {
         var storage = window[type],
