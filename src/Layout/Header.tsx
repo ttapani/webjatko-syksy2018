@@ -64,6 +64,7 @@ class Header extends React.Component<Props, null> {
     constructor(props: Props) {
         super(props);
         this.handleLogout = this.handleLogout.bind(this);
+        this.handleProfileClicked = this.handleProfileClicked.bind(this);
     }
 
     private handleLogout(event: React.MouseEvent<HTMLButtonElement>) {
@@ -74,6 +75,10 @@ class Header extends React.Component<Props, null> {
 
     private handleLogin(event: React.MouseEvent<HTMLButtonElement>) {
         Router.push("/login");
+    }
+
+    private handleProfileClicked(event: React.MouseEvent<HTMLButtonElement>) {
+        Router.push("/profile");
     }
     
     public render(): React.ReactNode {
@@ -104,7 +109,8 @@ class Header extends React.Component<Props, null> {
                         variant="contained"
                         color="secondary"
                         className={classes.userButton}
-                        disabled={this.props.session.type == "guest"} 
+                        disabled={this.props.session.type == "guest"}
+                        onClick={this.handleProfileClicked}
                     >
                         {this.props.session.userName}
                         <AccountCircle className={classes.rightIcon}/>
