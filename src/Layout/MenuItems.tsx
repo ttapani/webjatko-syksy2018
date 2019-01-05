@@ -18,7 +18,7 @@ const mainListItems = (
         <ListItemIcon>
             <ListIcon />
         </ListItemIcon>
-        <ListItemText primary="Equipments" />
+        <ListItemText primary="Equipment" />
     </MenuItem>
   </div>
 );
