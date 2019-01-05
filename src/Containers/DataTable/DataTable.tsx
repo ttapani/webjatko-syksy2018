@@ -25,6 +25,7 @@ interface IProps extends WithStyles<typeof styles> {
     onRowsChanged?: (data: Item[]) => void;
     onRowsAdded?: (data: Item[]) => void;
     onRowsDeleted?: (data: string[]) => void;
+    defaultUser?: string;
 }
 
 interface IState {
@@ -129,7 +130,7 @@ class DataTable extends React.Component<IProps, IState> {
     changeAddedRows = (addedRows) => this.setState({
         addedRows: addedRows.map(row => (Object.keys(row).length ? row : {
         //   equipmentId: null,
-        //   userId: null,
+           userId: this.props.defaultUser? this.props.defaultUser : null,
         //   begins: null,
         //   ends: null,
         //   returned: null

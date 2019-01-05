@@ -73,37 +73,43 @@ class LoansTable extends React.Component<Props, IState> {
         return this.props.loans.filter((loan) => loan.userId == this.props.session.userId);
     }
 
+    private columns = [
+        {
+            title: 'Equipment',
+            name: 'equipmentId',
+            getCellValue: (row) => getNameById(row.equipmentId, this.props.equipment),
+        },
+        {
+            title: "Begins",
+            name: 'begins',
+        },
+        {
+            title: "Ends",
+            name: "ends",
+            
+        },
+        {
+            title: "Returned",
+            name: "returned",
+        },
+    ];
+
     public render(): React.ReactNode {
         const { classes, loans, equipment, users } = this.props;
+
+        if(this.props.session.type != "normal") {
+            this.columns.splice(1, 0, {
+                title: "User",
+                name: 'userId',
+                getCellValue: (row) => getNameById(row.userId, this.props.users),
+            })
+        }
+
         return (
                 <div className={classes.tableContainer}>
                     <Paper className={classes.root}>
                         <DataTable
-                            columns={[
-                                {
-                                    title: 'Equipment',
-                                    name: 'equipmentId',
-                                    getCellValue: (row) => getNameById(row.equipmentId, equipment),
-                                },
-                                {
-                                    title: "User",
-                                    name: 'userId',
-                                    getCellValue: (row) => getNameById(row.userId, users),
-                                },
-                                {
-                                    title: "Begins",
-                                    name: 'begins',
-                                },
-                                {
-                                    title: "Ends",
-                                    name: "ends",
-                                    
-                                },
-                                {
-                                    title: "Returned",
-                                    name: "returned",
-                                },
-                            ]}
+                            columns={this.columns}
                             editingColumnExtensions={[
                                 {
                                   columnName: 'equipmentId',
@@ -119,6 +125,7 @@ class LoansTable extends React.Component<Props, IState> {
                             onRowsAdded={this.props.addLoans}
                             onRowsDeleted={this.props.removeLoans}
                             appData={{equipment: equipment, users: users }}
+                            defaultUser={this.props.session.userId}
                         />
                     </Paper>
                 </div>
