@@ -69,6 +69,12 @@ class UsersView extends React.Component<Props, IState> {
                                     title: "Email",
                                     name: 'email',
                                 },
+                                {   title: "Description",
+                                    name: 'description',
+                                },
+                                {   title: "Password",
+                                    name: 'password',
+                                },
                             ]}
                             rows={users}
                             onRowsChange={this.setUsers}
