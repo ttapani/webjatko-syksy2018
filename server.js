@@ -9,24 +9,19 @@ const app = next({ dev })
 const handle = app.getRequestHandler()
 
 app.prepare()
-  .then(() => {
+.then(() => {
     createServer((req, res) => {
-      const parsedUrl = parse(req.url, true)
-      const rootStaticFiles = [
-        '/manifest.json',
-        '/service-worker.js',
-        '/images/icons-192.png',
-        '/images/icons-512.png',
-      ]
-      if (rootStaticFiles.indexOf(parsedUrl.pathname) > -1) {
-        const path = join(__dirname, 'static', parsedUrl.pathname)
-        app.serveStatic(req, res, path)
-      } else {
-        handle(req, res, parsedUrl)
-      }
+        const parsedUrl = parse(req.url, true)
+        const { pathname, query } = parsedUrl
+        if (pathname === '/service-worker.js') {
+            const filePath = join(__dirname, '.next', pathname)
+            app.serveStatic(req, res, filePath)
+        } else {
+            handle(req, res, parsedUrl)
+        }
     })
-      .listen(port, (err) => {
+    .listen(port, (err) => {
         if (err) throw err
         console.log(`> Ready on http://localhost:${port}`)
-      })
+    })
 })
