@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableEditRow  } from '@devexpress/dx-react-grid-material-ui';
-import { LoanInterval } from 'src/Views/LoansView';
-import { getReservedIntervals } from '../../Views/LoansView';
+import { LoanInterval } from '../LoansTable';
+import { getReservedIntervals } from '../LoansTable';
 import LookupEditCell from './LookupEditCell';
 import DatePickerCell from './DatePickerCell';
 

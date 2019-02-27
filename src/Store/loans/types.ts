@@ -17,4 +17,17 @@ export interface SetLoansAction extends Action {
     type: 'loans/SET';
 }
 
-export type LoanAction = SetLoansAction;
+export interface AddLoansAction extends Action {
+    type: 'loans/ADD';
+}
+
+export interface UpdateLoansAction extends Action {
+    type: 'loans/UPDATE';
+}
+
+export interface DeleteLoansAction extends Action {
+    type: 'loans/REMOVE';
+}
+
+
+export type LoanAction = SetLoansAction | AddLoansAction | UpdateLoansAction | DeleteLoansAction;

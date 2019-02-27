@@ -6,6 +6,10 @@ import { withStyles } from '@material-ui/core/styles';
 import { createStyles, WithStyles, Theme } from '@material-ui/core';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Router, { withRouter, SingletonRouter } from 'next/router';
+import { refreshUser } from '../Store/login/actions';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { LoginAction, LoginState } from 'src/Store/login/types';
 
 interface ILayoutProps extends WithStyles<typeof styles> {
     title?: string;
@@ -15,6 +19,15 @@ interface ILayoutProps extends WithStyles<typeof styles> {
 interface ILayoutState {
     mobileOpen: boolean;
 }
+
+interface StateProps {
+}
+
+interface DispatchProps {
+    refreshUser: () => Promise<void>;
+}
+
+type IProps = StateProps & ILayoutProps & DispatchProps;
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -30,8 +43,8 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-class Layout extends React.Component<ILayoutProps, ILayoutState> {
-    constructor(props: ILayoutProps) {
+class Layout extends React.Component<IProps, ILayoutState> {
+    constructor(props: IProps) {
         super(props);
         this.state = { mobileOpen: false };
     }
@@ -51,6 +64,10 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
         Router.onRouteChangeError = () => {
             console.log('error at loading page');
         };
+
+        this.props.refreshUser().catch(() => {
+            console.log("no user to refresh");
+        });
     }
 
     public render(): React.ReactNode {
@@ -77,4 +94,12 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
     }
 }
 
-export default withRouter(withStyles(styles)(Layout));
+const mapDispatchToProps = (dispatch: ThunkDispatch<LoginState, undefined, LoginAction>, ownProps: ILayoutProps): DispatchProps => {
+    return {
+        refreshUser: async() => {
+            await dispatch(refreshUser())
+        }
+    }
+}
+
+export default withRouter(withStyles(styles)(connect(null, mapDispatchToProps)((Layout))));

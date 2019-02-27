@@ -12,6 +12,8 @@ import { Provider } from 'react-redux'
 import withRedux from 'next-redux-wrapper'
 import {initStore} from '../src/Store/store';
 
+import { register, unregister } from 'next-offline/runtime'
+
 class MyApp extends App {
   constructor(props) {
     super(props);
@@ -26,6 +28,11 @@ class MyApp extends App {
     if (jssStyles && jssStyles.parentNode) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
+    register()
+  }
+
+  componentWillUnmount() {
+    unregister()
   }
 
   render() {

@@ -1,0 +1,1 @@
+export const TokenKey = "loansystem_user_loginstate";
